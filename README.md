@@ -1,4 +1,4 @@
-cs320_project2
-==============
+cs320_project2_group11
+======================
 
-Project #2 for CS320
+Project #2 for CS320, group #11

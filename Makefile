@@ -1,6 +1,6 @@
 .PHONY: all run clean
 
-TARGET = cs320_project2_group2.exe
+TARGET = cs320_project2_group11.exe
 
 SOURCES = \
 	main.cs \
