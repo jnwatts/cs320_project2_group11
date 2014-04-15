@@ -1,0 +1,14 @@
+TODO 2014-04-15
+===============
+
+* Plan proper MVC for GUI vs DB connection
+** Async queries?
+* Build out GUI to:
+** Allow user to enter DB connection information
+** Allow user to enter SQL queries and execute them
+** Show results from SQL queries
+* Implement MYSQL Connector/Net
+** First-pass integration tested under Ubuntu, need to test under Windows and then build out according to MVC design
+** http://stackoverflow.com/questions/9006986/use-mysql-in-a-c-sharp-windows-application-within-visual-studio-2010
+** http://mono-project.com/MySQL
+** http://dev.mysql.com/downloads/connector/net/
