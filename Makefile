@@ -14,7 +14,7 @@ LIBS = dotnet
 
 all: $(TARGET)
 
-MCS ?= mcs
+MCS ?= gmcs
 MONO ?= mono
 MONOFLAGS ?= -debug -target:exe
 MONOFLAGS += $(foreach lib,$(LIBS),-pkg:$(lib))
