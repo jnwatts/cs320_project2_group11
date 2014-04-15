@@ -8,7 +8,7 @@ SOURCES = \
 
 RESOURCES =
 
-REFS = 
+REFS = MySql.Data.dll System.Data.dll
 
 LIBS = dotnet
 
