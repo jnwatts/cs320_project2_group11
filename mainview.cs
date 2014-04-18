@@ -19,6 +19,8 @@ public class MainView : Form
     {
         this.SuspendLayout();
 
+        this.DoubleBuffered = true;
+
         tabControl = new TabControl();
         tabControl.Dock = DockStyle.Fill;
         Controls.Add(tabControl);
