@@ -23,6 +23,8 @@ public class RawSqlView : UserControl
         tlp0.Dock = DockStyle.Fill;
         Controls.Add(tlp0);
 
+        tlp0.ColumnCount = 1;
+
         tCmd = new TextBox();
         tCmd.Text = "SHOW DATABASES;";
         tCmd.Anchor = AnchorStyles.Left | AnchorStyles.Right;
@@ -36,29 +38,32 @@ public class RawSqlView : UserControl
                     }
                 });
         tCmd.KeyDown += keh;
+        tlp0.RowCount++;
         tlp0.Controls.Add(tCmd);
 
         btnExecute = new Button();
         btnExecute.Text = "Execute";
         btnExecute.Click += new EventHandler(btnExecute_OnClick);
         btnExecute.Anchor = AnchorStyles.Left;
+        tlp0.RowCount++;
         tlp0.Controls.Add(btnExecute);
 
         tError = new TextBox();
-        tError.Top = btnExecute.Bottom;
-        tError.Width = this.Width;
         tError.Anchor = AnchorStyles.Left | AnchorStyles.Right;
         tError.Text = "";
         tError.Multiline = true;
         tError.Height *= 4;
         tError.ReadOnly = true;
+        tlp0.RowCount++;
         tlp0.Controls.Add(tError);
         
         g = new DataGridView();
-        g.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
         g.Dock = DockStyle.Fill;
         g.AutoGenerateColumns = true;
+        tlp0.RowCount++;
         tlp0.Controls.Add(g);
+
+        Util.FixTableLayoutStyles(tlp0);
 
         this.ResumeLayout();
     }

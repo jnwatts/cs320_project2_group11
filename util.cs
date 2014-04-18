@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Windows.Forms;
 
 public class Util
 {
@@ -29,5 +30,24 @@ public class Util
                 val = defaultValue;
         }
         return val;
+    }
+
+    public static void FixTableLayoutStyles(TableLayoutPanel panel) {
+        // Work around weird bug w/ last row/column's SizeType.AutoSize growing but not shrinking
+        panel.ColumnStyles.Clear();
+        for (int i = 0; i < panel.ColumnCount; ++i) {
+            if (i < panel.ColumnCount - 1)
+                panel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            else
+                panel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100.0f));
+        }
+
+        panel.RowStyles.Clear();
+        for (int i = 0; i < panel.RowCount; ++i) {
+            if (i < panel.RowCount - 1)
+                panel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            else
+                panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 100.0f));
+        }
     }
 }

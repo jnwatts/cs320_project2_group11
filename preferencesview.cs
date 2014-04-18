@@ -61,7 +61,10 @@ public class PreferencesView : UserControl
         lPooling.Text = "Connection Pooling";
         btnSave.Text = "Save";
         btnSave.Click += new EventHandler(btnSave_OnClick);
-        
+
+        // Work around weird bug w/ last column's SizeType.AutoSize growing but not shrinking
+        Util.FixTableLayoutStyles(tlp0);
+
         this.ResumeLayout();
     }
 
