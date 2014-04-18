@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 public class PreferencesView : UserControl
 {
-    private FlowLayoutPanel flp0;
+    private TableLayoutPanel tlp0;
     private Label lUsername;
     private Label lPassword;
     private Label lHostname;
@@ -25,27 +25,34 @@ public class PreferencesView : UserControl
     {
         this.SuspendLayout();
 
-        //TODO: Convert to TableLayoutPanel
+        tlp0 = new TableLayoutPanel();
+        tlp0.Dock = DockStyle.Fill;
+        Controls.Add(tlp0);
 
-        flp0 = new FlowLayoutPanel();
-        flp0.FlowDirection = FlowDirection.TopDown;
-        flp0.WrapContents = false;
-        flp0.AutoScroll = true;
-        flp0.AutoSize = true;
-        flp0.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-        Controls.Add(flp0);
+        tlp0.ColumnCount = 2;
 
-        flp0.Controls.Add(lUsername = new Label());
-        flp0.Controls.Add(tUsername = new TextBox());
-        flp0.Controls.Add(lPassword = new Label());
-        flp0.Controls.Add(tPassword = new TextBox());
-        flp0.Controls.Add(lHostname = new Label());
-        flp0.Controls.Add(tHostname = new TextBox());
-        flp0.Controls.Add(lDatabase = new Label());
-        flp0.Controls.Add(tDatabase = new TextBox());
-        flp0.Controls.Add(lPooling = new Label());
-        flp0.Controls.Add(cbPooling = new CheckBox());
-        flp0.Controls.Add(btnSave = new Button());
+        tlp0.RowCount++;
+        tlp0.Controls.Add(lUsername = new Label());
+        tlp0.Controls.Add(tUsername = new TextBox());
+        tlp0.RowCount++;
+        tlp0.Controls.Add(lPassword = new Label());
+        tlp0.Controls.Add(tPassword = new TextBox());
+        tlp0.RowCount++;
+        tlp0.Controls.Add(lHostname = new Label());
+        tlp0.Controls.Add(tHostname = new TextBox());
+        tlp0.RowCount++;
+        tlp0.Controls.Add(lDatabase = new Label());
+        tlp0.Controls.Add(tDatabase = new TextBox());
+        tlp0.RowCount++;
+        tlp0.Controls.Add(lPooling = new Label());
+        tlp0.Controls.Add(cbPooling = new CheckBox());
+        tlp0.RowCount++;
+        tlp0.Controls.Add(btnSave = new Button());
+
+        tUsername.Dock = DockStyle.Fill;
+        tPassword.Dock = DockStyle.Fill;
+        tHostname.Dock = DockStyle.Fill;
+        tDatabase.Dock = DockStyle.Fill;
 
         lUsername.Text = "Username";
         lPassword.Text = "Password";
