@@ -6,62 +6,48 @@ using MySql.Data.MySqlClient;
 
 public class MainApp : Form
 {
+    private MainView mv = null;
+    private string connectionString = "";
+
     public static void Main()
     {
-        Application.Run(new MainApp());
+        MainApp ma = new MainApp();
+        Application.Run(ma.mv);
     }
 
     public MainApp()
     {
-        Button b = new Button();
-        b.Width += 50;
-        b.Text = "Hello, World?";
-        b.Click += new EventHandler(Button_Click);
-        Controls.Add(b);
-
-        dbtest();
+        mv = new MainView();
+        mv.OnSQLConnect += dbconnect;
+        mv.OnSQLExecute += dbexec;
+        //mv.Show();
     }
 
-    private void dbtest()
+    private void dbconnect(string connectionString)
     {
-        string connectionString =
+        connectionString =
             "Server=localhost;" +
-            "Database=test;" +
-            "User ID=myuserid;" +
-            "Password=mypassword;" +
+            "Database=cs320_project2;" +
+            "User ID=cs320;" +
+            "Password=aiN3xei3;" +
             "Pooling=false";
-        IDbConnection dbcon;
-        dbcon = new MySqlConnection(connectionString);
-        dbcon.Open();
-        IDbCommand dbcmd = dbcon.CreateCommand();
-        // requires a table to be created named employee
-        // with columns firstname and lastname
-        // such as,
-        //        CREATE TABLE employee (
-        //           firstname varchar(32),
-        //           lastname varchar(32));
-        string sql =
-            "SELECT firstname, lastname " +
-            "FROM employee";
-        dbcmd.CommandText = sql;
-        IDataReader reader = dbcmd.ExecuteReader();
-        while(reader.Read()) {
-            string FirstName = (string) reader["firstname"];
-            string LastName = (string) reader["lastname"];
-            Console.WriteLine("Name: " +
-                    FirstName + " " + LastName);
-        }
-        // clean up
-        reader.Close();
-        reader = null;
-        dbcmd.Dispose();
-        dbcmd = null;
-        dbcon.Close();
-        dbcon = null;
     }
 
-    private void Button_Click(object sender, EventArgs e)
+    private void dbexec(string command)
     {
-        MessageBox.Show("Hello, World!");
+        try {
+            MySqlConnection dbcon;
+            dbcon = new MySqlConnection(connectionString);
+            dbcon.Open();
+            MySqlDataAdapter da = new MySqlDataAdapter(command, dbcon);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            mv.DataSource = dt;
+            dbcon.Close();
+            dbcon = null;
+        } catch(Exception e) {
+            mv.Error = e.ToString();
+        }
     }
+
 }

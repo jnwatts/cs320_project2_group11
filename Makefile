@@ -4,7 +4,7 @@ TARGET = cs320_project2_group11.exe
 
 SOURCES = \
 	main.cs \
-	test.cs
+    mainview.cs
 
 RESOURCES =
 
