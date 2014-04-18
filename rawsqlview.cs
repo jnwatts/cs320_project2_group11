@@ -58,6 +58,7 @@ public class RawSqlView : UserControl
         tlp0.Controls.Add(tError);
         
         g = new DataGridView();
+        g.BorderStyle = BorderStyle.None;
         g.Dock = DockStyle.Fill;
         g.AutoGenerateColumns = true;
         tlp0.RowCount++;
