@@ -3,8 +3,13 @@
 TARGET = cs320_project2_group11.exe
 
 SOURCES = \
+    dbmodel.cs \
 	main.cs \
-	test.cs
+    mainview.cs \
+    preferencesview.cs \
+    preferencesmodel.cs \
+    rawsqlview.cs \
+    util.cs
 
 RESOURCES =
 
@@ -24,7 +29,7 @@ $(TARGET): $(SOURCES)
 	$(MCS) $(MONOFLAGS) -out:"$@" $^ 
 
 run: $(TARGET)
-	$(MONO) $(TARGET)
+	$(MONO) --debug $(TARGET)
 
 clean:
 	rm -f "$(TARGET)"

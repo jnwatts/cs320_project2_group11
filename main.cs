@@ -2,66 +2,59 @@ using System;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
 
 public class MainApp : Form
 {
+    private DbModel dbm = null;
+    private PreferencesModel pm = null;
+    private MainView mv = null;
+
+    private string prefsPath = "preferences.xml";
+
     public static void Main()
     {
-        Application.Run(new MainApp());
+        //TODO: Read settings path from arg or env?
+        MainApp ma = new MainApp();
+        Application.EnableVisualStyles();
+        Application.Run(ma.mv);
     }
 
     public MainApp()
     {
-        Button b = new Button();
-        b.Width += 50;
-        b.Text = "Hello, World?";
-        b.Click += new EventHandler(Button_Click);
-        Controls.Add(b);
+        pm = new PreferencesModel(prefsPath);
+        dbm = new DbModel();
+        mv = new MainView();
+        pm.Changed += new EventHandler(PrefsChanged);
+        mv.PrefsView.OnSavePrefs += pm.Save;
+        mv.RawSqlView.OnSQLExecute += SQLExecute;
 
-        dbtest();
+        pm.Load();
     }
 
-    private void dbtest()
+    private void PrefsChanged(object sender, EventArgs e)
     {
-        string connectionString =
-            "Server=localhost;" +
-            "Database=test;" +
-            "User ID=myuserid;" +
-            "Password=mypassword;" +
-            "Pooling=false";
-        IDbConnection dbcon;
-        dbcon = new MySqlConnection(connectionString);
-        dbcon.Open();
-        IDbCommand dbcmd = dbcon.CreateCommand();
-        // requires a table to be created named employee
-        // with columns firstname and lastname
-        // such as,
-        //        CREATE TABLE employee (
-        //           firstname varchar(32),
-        //           lastname varchar(32));
-        string sql =
-            "SELECT firstname, lastname " +
-            "FROM employee";
-        dbcmd.CommandText = sql;
-        IDataReader reader = dbcmd.ExecuteReader();
-        while(reader.Read()) {
-            string FirstName = (string) reader["firstname"];
-            string LastName = (string) reader["lastname"];
-            Console.WriteLine("Name: " +
-                    FirstName + " " + LastName);
+        DataTable dt = pm.CurrentPrefs;
+        mv.PrefsView.DataSource = dt;
+        dbm.Username = Util.GetColumnString(dt, "Username", "");
+        dbm.Password = Util.GetColumnString(dt, "Password", "");
+        dbm.Hostname = Util.GetColumnString(dt, "Hostname", "");
+        dbm.Database = Util.GetColumnString(dt, "Database", "");
+        dbm.Pooling = Util.GetColumnBool(dt, "Pooling", false); 
+    }
+
+    private void SQLExecute(string sql)
+    {
+        string result = null;
+        result = dbm.Execute(sql, SQLResult);
+        if (result != null) {
+            mv.RawSqlView.DataSource = null;
+            mv.RawSqlView.Error = result;
         }
-        // clean up
-        reader.Close();
-        reader = null;
-        dbcmd.Dispose();
-        dbcmd = null;
-        dbcon.Close();
-        dbcon = null;
     }
 
-    private void Button_Click(object sender, EventArgs e)
+    private void SQLResult(DataTable result, string error)
     {
-        MessageBox.Show("Hello, World!");
+        mv.RawSqlView.DataSource = result;
+        mv.RawSqlView.Error = error;
     }
 }

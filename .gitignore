@@ -1,5 +1,6 @@
 # Ignore target program
 cs320_project2_group11.exe
+preferences.xml
 
 # Ignore mono temporary files
 *.mdb
