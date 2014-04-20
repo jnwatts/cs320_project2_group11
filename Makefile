@@ -3,13 +3,13 @@
 TARGET = cs320_project2_group11.exe
 
 SOURCES = \
-    dbmodel.cs \
-	main.cs \
-    mainview.cs \
-    preferencesview.cs \
-    preferencesmodel.cs \
-    rawsqlview.cs \
-    util.cs
+	App/mainapp.cs \
+    Model/dbmodel.cs \
+    Model/preferencesmodel.cs \
+    View/mainview.cs \
+    View/preferencesview.cs \
+    View/rawsqlview.cs \
+    Util/util.cs
 
 RESOURCES =
 

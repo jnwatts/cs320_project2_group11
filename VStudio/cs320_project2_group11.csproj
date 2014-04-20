@@ -63,28 +63,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\controller.cs">
-      <Link>controller.cs</Link>
-    </Compile>
-    <Compile Include="..\dbmodel.cs">
+    <Compile Include="..\Model\dbmodel.cs">
       <Link>dbmodel.cs</Link>
     </Compile>
-    <Compile Include="..\main.cs">
+    <Compile Include="..\App\mainapp.cs">
       <Link>main.cs</Link>
     </Compile>
-    <Compile Include="..\mainview.cs">
+    <Compile Include="..\View\mainview.cs">
       <Link>mainview.cs</Link>
     </Compile>
-    <Compile Include="..\preferencesmodel.cs">
+    <Compile Include="..\Model\preferencesmodel.cs">
       <Link>preferencesmodel.cs</Link>
     </Compile>
-    <Compile Include="..\preferencesview.cs">
+    <Compile Include="..\View\preferencesview.cs">
       <Link>preferencesview.cs</Link>
     </Compile>
-    <Compile Include="..\rawsqlview.cs">
+    <Compile Include="..\View\rawsqlview.cs">
       <Link>rawsqlview.cs</Link>
     </Compile>
-    <Compile Include="..\util.cs">
+    <Compile Include="..\Util\util.cs">
       <Link>util.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
