@@ -36,7 +36,9 @@ public class PreferencesView : UserControl
         tlp0.Controls.Add(tUsername = new TextBox());
         tlp0.RowCount++;
         tlp0.Controls.Add(lPassword = new Label());
-        tlp0.Controls.Add(tPassword = new TextBox());
+        TextBox passwordTB = new TextBox();
+        passwordTB.UseSystemPasswordChar = true;
+        tlp0.Controls.Add(tPassword = passwordTB);
         tlp0.RowCount++;
         tlp0.Controls.Add(lHostname = new Label());
         tlp0.Controls.Add(tHostname = new TextBox());
