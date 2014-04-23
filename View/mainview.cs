@@ -21,6 +21,9 @@ public class MainView : Form
 
         this.DoubleBuffered = true;
 
+        this.Height = 600;
+        this.Width = 600;
+
         tabControl = new TabControl();
         tabControl.Dock = DockStyle.Fill;
         Controls.Add(tabControl);
