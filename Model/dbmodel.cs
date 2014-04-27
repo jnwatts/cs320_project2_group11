@@ -4,7 +4,7 @@ using MySql.Data.MySqlClient;
 
 public class DbModel
 {
-    public delegate void ResultHandler(DataTable result, string message);
+    public delegate void ResultHandler(DataTable result, string message, Exception exception);
 
     public string Username { get; set; }
     public string Password { get; set; }
@@ -26,7 +26,9 @@ public class DbModel
     public string Execute(string sql, ResultHandler handler)
     {
         string result = null;
+        string message = null;
         DataTable dt = null;
+        Exception exception = null;
         if ((result = Connect()) != null) {
             return result;
         }
@@ -37,10 +39,13 @@ public class DbModel
             da.Fill(dt);
             da.Dispose();
             da = null;
+            message = String.Format("Returned {0} rows", dt.Rows.Count);
         } catch (Exception e) {
             result = e.Message;
+            message = result;
+            exception = e;
         }
-        handler(dt, result);
+        handler(dt, message, exception);
         return result;
     }
 

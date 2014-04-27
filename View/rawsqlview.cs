@@ -90,6 +90,18 @@ public class RawSqlView : UserControl
         }
     }
 
+    public bool OperationFailed
+    {
+        set
+        {
+            if (value) {
+                tMessage.Font = new Font(tMessage.Font, FontStyle.Bold);
+            } else {
+                tMessage.Font = new Font(tMessage.Font, FontStyle.Regular);
+            }
+        }
+    }
+
     private void btnExecute_OnClick(object sender, EventArgs e)
     {
         if (OnSQLExecute == null) {

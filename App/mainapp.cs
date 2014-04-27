@@ -49,12 +49,14 @@ public class MainApp : Form
         if (result != null) {
             mv.RawSqlView.DataSource = null;
             mv.RawSqlView.Message = result;
+            mv.RawSqlView.OperationFailed = true;
         }
     }
 
-    private void SQLResult(DataTable result, string message)
+    private void SQLResult(DataTable result, string message, Exception exception)
     {
         mv.RawSqlView.DataSource = result;
         mv.RawSqlView.Message = message;
+        mv.RawSqlView.OperationFailed = (exception != null);
     }
 }
