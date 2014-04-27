@@ -48,13 +48,13 @@ public class MainApp : Form
         result = dbm.Execute(sql, SQLResult);
         if (result != null) {
             mv.RawSqlView.DataSource = null;
-            mv.RawSqlView.Error = result;
+            mv.RawSqlView.Message = result;
         }
     }
 
-    private void SQLResult(DataTable result, string error)
+    private void SQLResult(DataTable result, string message)
     {
         mv.RawSqlView.DataSource = result;
-        mv.RawSqlView.Error = error;
+        mv.RawSqlView.Message = message;
     }
 }

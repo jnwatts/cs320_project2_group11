@@ -4,7 +4,7 @@ using MySql.Data.MySqlClient;
 
 public class DbModel
 {
-    public delegate void ResultHandler(DataTable result, string error);
+    public delegate void ResultHandler(DataTable result, string message);
 
     public string Username { get; set; }
     public string Password { get; set; }

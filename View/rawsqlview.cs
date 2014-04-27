@@ -8,7 +8,7 @@ public class RawSqlView : UserControl
 {
     private TableLayoutPanel tlp0;
     private Button btnExecute = null;
-    private TextBox tError = null;
+    private TextBox tMessage = null;
     private TextBox tCmd = null;
     private DataGridView g = null;
 
@@ -48,14 +48,14 @@ public class RawSqlView : UserControl
         tlp0.RowCount++;
         tlp0.Controls.Add(btnExecute);
 
-        tError = new TextBox();
-        tError.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-        tError.Text = "";
-        tError.Multiline = true;
-        tError.Height *= 4;
-        tError.ReadOnly = true;
+        tMessage = new TextBox();
+        tMessage.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        tMessage.Text = "";
+        tMessage.Multiline = true;
+        tMessage.Height *= 4;
+        tMessage.ReadOnly = true;
         tlp0.RowCount++;
-        tlp0.Controls.Add(tError);
+        tlp0.Controls.Add(tMessage);
         
         g = new DataGridView();
         g.BorderStyle = BorderStyle.None;
@@ -82,11 +82,11 @@ public class RawSqlView : UserControl
         }
     }
 
-    public string Error
+    public string Message
     {
         set
         {
-            tError.Text = value;
+            tMessage.Text = value;
         }
     }
 
