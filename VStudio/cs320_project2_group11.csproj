@@ -69,17 +69,28 @@
     <Compile Include="..\App\mainapp.cs">
       <Link>main.cs</Link>
     </Compile>
+    <Compile Include="..\Model\parttypeentry.cs">
+      <Link>parttypeentry.cs</Link>
+    </Compile>
     <Compile Include="..\View\mainview.cs">
       <Link>mainview.cs</Link>
     </Compile>
     <Compile Include="..\Model\preferencesmodel.cs">
       <Link>preferencesmodel.cs</Link>
     </Compile>
+    <Compile Include="..\View\parteditview.cs">
+      <Link>parteditview.cs</Link>
+    </Compile>
+    <Compile Include="..\View\partsview.cs">
+      <Link>partsview.cs</Link>
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="..\View\preferencesview.cs">
       <Link>preferencesview.cs</Link>
     </Compile>
     <Compile Include="..\View\rawsqlview.cs">
       <Link>rawsqlview.cs</Link>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="..\Util\util.cs">
       <Link>util.cs</Link>

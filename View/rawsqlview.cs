@@ -2,15 +2,20 @@ using System;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Collections;
 using MySql.Data.MySqlClient;
 
 public class RawSqlView : UserControl
 {
     private TableLayoutPanel tlp0;
     private Button btnExecute = null;
+    private ComboBox dropDown = null;
     private TextBox tMessage = null;
     private TextBox tCmd = null;
     private DataGridView g = null;
+
+    private ArrayList dropDownList;
+    private ArrayList dropDownQueries;
 
     public delegate void SQLExecuteHandler(string command);
     public event SQLExecuteHandler OnSQLExecute = null;
@@ -47,6 +52,21 @@ public class RawSqlView : UserControl
         btnExecute.Anchor = AnchorStyles.Left;
         tlp0.RowCount++;
         tlp0.Controls.Add(btnExecute);
+
+        dropDown = new ComboBox();
+        dropDown.Width *= 2;
+
+        dropDown = new ComboBox();
+        dropDown.Width *= 2;
+        populateDropDown();
+        populateQueries();
+        dropDown.DataSource = dropDownList;
+        dropDown.SelectedValueChanged +=
+            new EventHandler(dropDown_SelectedValueChanged);
+        dropDown.DropDownStyle = ComboBoxStyle.DropDownList;
+        tlp0.Controls.Add(dropDown);
+
+
 
         tMessage = new TextBox();
         tMessage.Anchor = AnchorStyles.Left | AnchorStyles.Right;
@@ -109,5 +129,30 @@ public class RawSqlView : UserControl
         }
 
         OnSQLExecute(tCmd.Text);
+    }
+
+    private void dropDown_SelectedValueChanged(object sender, EventArgs e)
+    {
+        if (dropDown.SelectedIndex != 0)
+        {
+            tCmd.Text = (string)dropDownQueries[dropDown.SelectedIndex - 1];
+        }
+    }
+
+    private void populateDropDown()
+    {
+        dropDownList = new ArrayList();
+        dropDownList.Add("Select a query...");
+        dropDownList.Add("Vendor parts w/ mfg and vendor");
+        dropDownList.Add("Manufacturers and parts");
+        dropDownList.Add("Parts w/ type attributes");
+    }
+
+    private void populateQueries()
+    {
+        dropDownQueries = new ArrayList();
+        dropDownQueries.Add("SELECT * FROM Vendor_parts AS VP INNER JOIN Manufacturers AS M ON VP.Manufacturer_id = M.Manufacturer_id INNER JOIN Vendors AS V ON VP.Vendor_id = V.Vendor_id;");
+        dropDownQueries.Add("SELECT * FROM Vendor_parts AS VP RIGHT OUTER JOIN Manufacturers AS M ON VP.Manufacturer_id = M.Manufacturer_id;");
+        dropDownQueries.Add("SELECT * FROM Parts AS P NATURAL LEFT JOIN Capacitor_attributes AS A NATURAL LEFT JOIN Part_types AS T WHERE T.Type = 'Capacitor'");
     }
 }
