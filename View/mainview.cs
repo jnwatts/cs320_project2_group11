@@ -9,11 +9,14 @@ public class MainView : Form
     TabControl tabControl = null;
     TabPage rsvTab = null;
     TabPage pvTab = null;
+    TabPage partsTab = null;
     RawSqlView rsv = null;
     PreferencesView pv = null;
+    PartsView parts = null;
 
     public PreferencesView PrefsView { get { return pv; } }
     public RawSqlView RawSqlView { get { return rsv; } }
+    public PartsView PartsView { get { return parts; } }
 
     public MainView()
     {
@@ -39,6 +42,12 @@ public class MainView : Form
         pv.Dock = DockStyle.Fill;
         pvTab.Controls.Add(pv);
         tabControl.TabPages.Add(pvTab);
+
+        partsTab = new TabPage("Parts");
+        parts = new PartsView();
+        parts.Dock = DockStyle.Fill;
+        partsTab.Controls.Add(parts);
+        tabControl.TabPages.Add(partsTab);
 
         this.ResumeLayout();
     }

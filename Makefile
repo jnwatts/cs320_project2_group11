@@ -6,9 +6,11 @@ SOURCES = \
 	App/mainapp.cs \
     Model/dbmodel.cs \
     Model/preferencesmodel.cs \
+    Model/parttypeentry.cs \
     View/mainview.cs \
     View/preferencesview.cs \
     View/rawsqlview.cs \
+    View/partsview.cs \
     Util/util.cs
 
 RESOURCES =

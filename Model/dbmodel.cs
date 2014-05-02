@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using MySql.Data.MySqlClient;
+using System.Collections.Generic;
 
 public class DbModel
 {
@@ -21,6 +22,14 @@ public class DbModel
         Hostname = "";
         Database = "";
         Pooling = false;
+    }
+
+    public List<PartTypeEntry> PartTypes()
+    {
+        List<PartTypeEntry> parttypes = new List<PartTypeEntry>();
+        //TODO: Oops... need to split to asynchronous. One func to get, and handler to consume. Move this to app or something, and use an async handler.
+        parttypes.Add(new PartTypeEntry(0, "Test value"));
+        return parttypes;
     }
 
     public string Execute(string sql, ResultHandler handler)

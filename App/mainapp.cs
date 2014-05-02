@@ -27,6 +27,7 @@ public class MainApp : Form
         pm.Changed += new EventHandler(PrefsChanged);
         mv.PrefsView.OnSavePrefs += pm.Save;
         mv.RawSqlView.OnSQLExecute += SQLExecute;
+        mv.PartsView.PartTypes = dbm.PartTypes();
 
         pm.Load();
     }
