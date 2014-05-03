@@ -55,15 +55,13 @@ public class RawSqlView : UserControl
 
         dropDown = new ComboBox();
         dropDown.Width *= 2;
-
-        dropDown = new ComboBox();
-        dropDown.Width *= 2;
         populateDropDown();
         populateQueries();
         dropDown.DataSource = dropDownList;
         dropDown.SelectedValueChanged +=
             new EventHandler(dropDown_SelectedValueChanged);
         dropDown.DropDownStyle = ComboBoxStyle.DropDownList;
+        tlp0.RowCount++;
         tlp0.Controls.Add(dropDown);
 
 
