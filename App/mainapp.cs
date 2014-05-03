@@ -2,6 +2,7 @@ using System;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 public class MainApp : Form
 {
@@ -27,9 +28,12 @@ public class MainApp : Form
         pm.Changed += new EventHandler(PrefsChanged);
         mv.PrefsView.OnSavePrefs += pm.Save;
         mv.RawSqlView.OnSQLExecute += SQLExecute;
-        mv.PartsView.PartTypes = dbm.PartTypes();
 
         pm.Load();
+
+        dbm.GetPartTypes(delegate(List<PartTypeEntry> partTypes) {
+            mv.PartsView.PartTypes = partTypes;
+        });
     }
 
     private void PrefsChanged(object sender, EventArgs e)

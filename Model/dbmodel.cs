@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class DbModel
 {
     public delegate void ResultHandler(DataTable result, string message, Exception exception);
+    public delegate void PartTypesUpdatedHandler(List<PartTypeEntry> partTypes);
 
     public string Username { get; set; }
     public string Password { get; set; }
@@ -24,12 +25,20 @@ public class DbModel
         Pooling = false;
     }
 
-    public List<PartTypeEntry> PartTypes()
+    public void GetPartTypes(PartTypesUpdatedHandler handler)
     {
-        List<PartTypeEntry> parttypes = new List<PartTypeEntry>();
-        //TODO: Oops... need to split to asynchronous. One func to get, and handler to consume. Move this to app or something, and use an async handler.
-        parttypes.Add(new PartTypeEntry(0, "Test value"));
-        return parttypes;
+        string sql = "SELECT Part_type_id, Type FROM Part_types;";
+        string errMsg = Execute(sql, delegate(DataTable result, string message, Exception exception) {
+            List<PartTypeEntry> partTypes = new List<PartTypeEntry>();
+            foreach (DataRow row in result.Rows) {
+                PartTypeEntry entry = new PartTypeEntry((int)row["Part_type_id"], (string)row["Type"]);
+                partTypes.Add(entry);
+            }
+            handler(partTypes);
+        });
+        if (errMsg != null) {
+            Console.WriteLine("Warning: Failed to execute query '{0}'. Error returned: {1}", sql, errMsg);
+        }
     }
 
     public string Execute(string sql, ResultHandler handler)
