@@ -41,6 +41,15 @@ public class DbModel
         }
     }
 
+    public void GetParts(PartTypeEntry partType, ResultHandler handler)
+    {
+        string sql = "SELECT * FROM Parts AS P NATURAL LEFT JOIN " + partType.name + "_attributes AS A NATURAL LEFT JOIN Part_types AS T WHERE T.Part_type_id = " + partType.typeId;
+        string errMsg = Execute(sql, handler);
+        if (errMsg != null) {
+            Console.WriteLine("Warning: Failed to execut query '{0}'. Error returned: {1}", sql, errMsg);
+        }
+    }
+
     public string Execute(string sql, ResultHandler handler)
     {
         string result = null;

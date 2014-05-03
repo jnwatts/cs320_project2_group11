@@ -28,6 +28,8 @@ public class MainApp : Form
         pm.Changed += new EventHandler(PrefsChanged);
         mv.PrefsView.OnSavePrefs += pm.Save;
         mv.RawSqlView.OnSQLExecute += SQLExecute;
+        mv.PartsView.OnShowParts += ShowParts;
+        mv.PartsView.OnEditPart += EditPart;
 
         pm.Load();
 
@@ -63,5 +65,18 @@ public class MainApp : Form
         mv.RawSqlView.DataSource = result;
         mv.RawSqlView.Message = message;
         mv.RawSqlView.OperationFailed = (exception != null);
+    }
+
+    private void ShowParts(PartTypeEntry partType)
+    {
+        dbm.GetParts(partType, delegate(DataTable result, string message, Exception exception) {
+            mv.PartsView.DataSource = result;
+        });
+    }
+
+    private void EditPart(DataRow row)
+    {
+        Console.WriteLine("EditPart {0}", row["Part_num"]);
+        //TODO: Implement EditPartView to handle this
     }
 }
