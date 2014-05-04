@@ -50,6 +50,34 @@ public class DbModel
         }
     }
 
+    public void GetPart(string Part_num/*TODO: , PartUpdatedHandler handler*/)
+    {
+        string sql = "SELECT * FROM Parts NATURAL JOIN Part_types WHERE Part_num = '" + Part_num + "'";
+        string errMsg = Execute(sql, delegate(DataTable attributeResult, string message, Exception exception) {
+            if (attributeResult.Rows.Count > 0) {
+                DataRow attributeRow = attributeResult.Rows[0];
+                string typeName = (string)attributeRow["Type"];
+                int typeId = (int)attributeRow["Part_type_id"];
+                sql = "SELECT * FROM " + typeName + "_attributes WHERE Part_num = '" + Part_num + "'";
+                errMsg = Execute(sql, delegate(DataTable extendedResult, string extendedMessage, Exception extendedException) {
+                    DataRow extendedRow = null;
+                    if (extendedResult.Rows.Count > 0) {
+                        extendedRow = extendedResult.Rows[0];
+                    }
+                    PartEntry partEntry = new PartEntry(Part_num, typeId, attributeRow, extendedRow);
+                    Console.WriteLine("Part: {0}", partEntry);
+                });
+                if (errMsg != null) {
+                    Console.WriteLine("Warning: Failed to execut query '{0}'. Error returned: {1}", sql, errMsg);
+                    errMsg = null;
+                }
+            }
+        });
+        if (errMsg != null) {
+            Console.WriteLine("Warning: Failed to execut query '{0}'. Error returned: {1}", sql, errMsg);
+        }
+    }
+
     public string Execute(string sql, ResultHandler handler)
     {
 #if DEBUG
