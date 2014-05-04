@@ -80,7 +80,7 @@ public class DbModel
                     if (extendedResult.Rows.Count > 0) {
                         extendedRow = extendedResult.Rows[0];
                     }
-                    PartEntry partEntry = new PartEntry(Part_num, typeId, attributeRow, extendedRow);
+                    PartEntry partEntry = new PartEntry(Part_num, typeId, typeName, attributeRow, extendedRow);
                     handler(partEntry);
                 });
                 if (errMsg != null) {
