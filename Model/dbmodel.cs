@@ -71,16 +71,14 @@ public class DbModel
         string sql = "SELECT * FROM Parts WHERE Part_num = '" + Part_num + "'";
         string errMsg = Execute(sql, delegate(DataTable attributeResult, string message, Exception exception) {
             if (attributeResult.Rows.Count > 0) {
-                DataRow attributeRow = attributeResult.Rows[0];
-                int typeId = (int)attributeRow["Part_type_id"];
+                int typeId = (int)attributeResult.Rows[0]["Part_type_id"];
                 string typeName = GetPartType(typeId);
+                attributeResult.Columns.Remove("Part_num");
+                attributeResult.Columns.Remove("Part_type_id");
                 sql = "SELECT * FROM " + typeName + "_attributes WHERE Part_num = '" + Part_num + "'";
                 errMsg = Execute(sql, delegate(DataTable extendedResult, string extendedMessage, Exception extendedException) {
-                    DataRow extendedRow = null;
-                    if (extendedResult.Rows.Count > 0) {
-                        extendedRow = extendedResult.Rows[0];
-                    }
-                    PartEntry partEntry = new PartEntry(Part_num, typeId, typeName, attributeRow, extendedRow);
+                    extendedResult.Columns.Remove("Part_num");
+                    PartEntry partEntry = new PartEntry(Part_num, typeId, typeName, attributeResult, extendedResult);
                     handler(partEntry);
                 });
                 if (errMsg != null) {
