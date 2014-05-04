@@ -7,6 +7,7 @@ public class DbModel
 {
     public delegate void ResultHandler(DataTable result, string message, Exception exception);
     public delegate void PartTypesUpdatedHandler(List<PartTypeEntry> partTypes);
+    public delegate void PartUpdatedHandler(PartEntry partEntry);
 
     public string Username { get; set; }
     public string Password { get; set; }
@@ -50,7 +51,7 @@ public class DbModel
         }
     }
 
-    public void GetPart(string Part_num/*TODO: , PartUpdatedHandler handler*/)
+    public void GetPart(string Part_num, PartUpdatedHandler handler)
     {
         string sql = "SELECT * FROM Parts NATURAL JOIN Part_types WHERE Part_num = '" + Part_num + "'";
         string errMsg = Execute(sql, delegate(DataTable attributeResult, string message, Exception exception) {
@@ -65,16 +66,18 @@ public class DbModel
                         extendedRow = extendedResult.Rows[0];
                     }
                     PartEntry partEntry = new PartEntry(Part_num, typeId, attributeRow, extendedRow);
-                    Console.WriteLine("Part: {0}", partEntry);
+                    handler(partEntry);
                 });
                 if (errMsg != null) {
                     Console.WriteLine("Warning: Failed to execut query '{0}'. Error returned: {1}", sql, errMsg);
                     errMsg = null;
+                    handler(null);
                 }
             }
         });
         if (errMsg != null) {
             Console.WriteLine("Warning: Failed to execut query '{0}'. Error returned: {1}", sql, errMsg);
+            handler(null);
         }
     }
 
