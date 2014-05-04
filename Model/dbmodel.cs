@@ -68,12 +68,12 @@ public class DbModel
 
     public void GetPart(string Part_num, PartUpdatedHandler handler)
     {
-        string sql = "SELECT * FROM Parts NATURAL JOIN Part_types WHERE Part_num = '" + Part_num + "'";
+        string sql = "SELECT * FROM Parts WHERE Part_num = '" + Part_num + "'";
         string errMsg = Execute(sql, delegate(DataTable attributeResult, string message, Exception exception) {
             if (attributeResult.Rows.Count > 0) {
                 DataRow attributeRow = attributeResult.Rows[0];
-                string typeName = (string)attributeRow["Type"];
                 int typeId = (int)attributeRow["Part_type_id"];
+                string typeName = GetPartType(typeId);
                 sql = "SELECT * FROM " + typeName + "_attributes WHERE Part_num = '" + Part_num + "'";
                 errMsg = Execute(sql, delegate(DataTable extendedResult, string extendedMessage, Exception extendedException) {
                     DataRow extendedRow = null;
