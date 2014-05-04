@@ -81,6 +81,9 @@ public class PartsView : UserControl
             foreach (PartTypeEntry pt in parttypes) {
                 cbPartType.Items.Add(pt);
             }
+            if (index < 0) {
+                index = 0;
+            }
             if (index < cbPartType.Items.Count) {
                 cbPartType.SelectedIndex = index;
             }
