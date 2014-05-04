@@ -7,6 +7,7 @@ SOURCES = \
     Model/dbmodel.cs \
     Model/preferencesmodel.cs \
     Model/parttypeentry.cs \
+    Model/partentry.cs \
     View/mainview.cs \
     View/preferencesview.cs \
     View/rawsqlview.cs \

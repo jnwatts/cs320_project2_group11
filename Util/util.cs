@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 public class Util
 {
@@ -48,6 +49,21 @@ public class Util
                 panel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             else
                 panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 100.0f));
+        }
+    }
+
+    public static void FillAttributes(DataRow row, Dictionary<string, string> attributes)
+    {
+        attributes.Clear();
+        foreach(DataColumn col in row.Table.Columns) {
+            if (col.ColumnName == "Part_num") {
+                continue;
+            }
+            if (col.DataType != System.Type.GetType("System.String")) {
+                Console.WriteLine("Warning: Ignoring column {0} due to non-string data-type: {1}", col, col.DataType);
+                continue;
+            }
+            attributes[col.ColumnName] = (row.IsNull(col) ? null : (string)row[col]);
         }
     }
 }
