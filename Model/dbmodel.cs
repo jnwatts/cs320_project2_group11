@@ -69,15 +69,16 @@ public class DbModel
                     handler(partEntry);
                 });
                 if (errMsg != null) {
-                    Console.WriteLine("Warning: Failed to execut query '{0}'. Error returned: {1}", sql, errMsg);
+                    Console.WriteLine("Warning: Failed to execute query '{0}'. Error returned: {1}", sql, errMsg);
                     errMsg = null;
-                    handler(null);
                 }
+            } else {
+                // Part doesn't exist, call handler with null
+                handler(null);
             }
         });
         if (errMsg != null) {
-            Console.WriteLine("Warning: Failed to execut query '{0}'. Error returned: {1}", sql, errMsg);
-            handler(null);
+            Console.WriteLine("Warning: Failed to execute query '{0}'. Error returned: {1}", sql, errMsg);
         }
     }
 
