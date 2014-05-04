@@ -16,6 +16,7 @@ public class DbModel
     public bool Pooling { get; set; }
 
     private MySqlConnection _con = null;
+    private List<PartTypeEntry> _partTypes = null;
 
     public DbModel()
     {
@@ -24,22 +25,36 @@ public class DbModel
         Hostname = "";
         Database = "";
         Pooling = false;
+
+        _partTypes = new List<PartTypeEntry>();
     }
 
     public void GetPartTypes(PartTypesUpdatedHandler handler)
     {
         string sql = "SELECT Part_type_id, Type FROM Part_types;";
         string errMsg = Execute(sql, delegate(DataTable result, string message, Exception exception) {
+            _partTypes.Clear();
             List<PartTypeEntry> partTypes = new List<PartTypeEntry>();
             foreach (DataRow row in result.Rows) {
                 PartTypeEntry entry = new PartTypeEntry((int)row["Part_type_id"], (string)row["Type"]);
                 partTypes.Add(entry);
+                _partTypes.Add(new PartTypeEntry(entry));
             }
             handler(partTypes);
         });
         if (errMsg != null) {
             Console.WriteLine("Warning: Failed to execute query '{0}'. Error returned: {1}", sql, errMsg);
         }
+    }
+
+    public string GetPartType(int Part_type_id) {
+        string type = "";
+        _partTypes.ForEach(delegate (PartTypeEntry entry) {
+            if (entry.typeId == Part_type_id) {
+                type = entry.name;
+            }
+        });
+        return type;
     }
 
     public void GetParts(PartTypeEntry partType, ResultHandler handler)
