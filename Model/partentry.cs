@@ -33,6 +33,16 @@ public class PartEntry
         this.ExtendedAttributes = new Dictionary<string, string>(other.ExtendedAttributes);
     }
 
+    public DataTable AttributesDataTable()
+    {
+        return Util.AttributesToDataTable("Attributes", Attributes);
+    }
+
+    public DataTable ExtendedAttributesDataTable()
+    {
+        return Util.AttributesToDataTable("ExtendedAttributes", ExtendedAttributes);
+    }
+
     public override String ToString()
     {
         string str = "{" + Part_num;
