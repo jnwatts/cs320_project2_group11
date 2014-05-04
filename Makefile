@@ -12,6 +12,7 @@ SOURCES = \
     View/preferencesview.cs \
     View/rawsqlview.cs \
     View/partsview.cs \
+    View/parteditview.cs \
     Util/util.cs
 
 RESOURCES =

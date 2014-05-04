@@ -10,13 +10,16 @@ public class MainView : Form
     TabPage rsvTab = null;
     TabPage pvTab = null;
     TabPage partsTab = null;
+    TabPage partEditTab = null;
     RawSqlView rsv = null;
     PreferencesView pv = null;
     PartsView parts = null;
+    PartEditView partEdit = null;
 
     public PreferencesView PrefsView { get { return pv; } }
     public RawSqlView RawSqlView { get { return rsv; } }
     public PartsView PartsView { get { return parts; } }
+    public PartEditView PartEditView { get { return partEdit; } }
 
     public MainView()
     {
@@ -48,6 +51,12 @@ public class MainView : Form
         parts.Dock = DockStyle.Fill;
         partsTab.Controls.Add(parts);
         tabControl.TabPages.Add(partsTab);
+
+        partEditTab = new TabPage("Edit Part");
+        partEdit = new PartEditView();
+        partEdit.Dock = DockStyle.Fill;
+        partEditTab.Controls.Add(partEdit);
+        tabControl.TabPages.Add(partEditTab);
 
         this.ResumeLayout();
     }

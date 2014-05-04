@@ -76,12 +76,10 @@ public class MainApp : Form
 
     private void EditPart(DataRow row)
     {
-        Console.WriteLine("EditPart {0}", row["Part_num"]);
         dbm.GetPart((string)row["Part_num"], delegate(PartEntry partEntry) {
             if (partEntry != null) {
-                Console.WriteLine("Got part: {0}", partEntry);
+                mv.PartEditView.Part = partEntry;
             }
         });
-        //TODO: Implement EditPartView to handle this
     }
 }
