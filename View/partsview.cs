@@ -12,12 +12,16 @@ public class PartsView : UserControl
     private List<PartTypeEntry> parttypes = null;
     private Button btnShowParts = null;
     private Button btnEditPart = null;
+    private Button btnDeletePart = null;
 
     public delegate void OnShowPartsHandler(PartTypeEntry partType);
     public event OnShowPartsHandler OnShowParts = null;
 
     public delegate void OnEditPartHandler(DataRow row);
     public event OnEditPartHandler OnEditPart = null;
+
+    public delegate void OnDeletePartHandler(DataRow row);
+    public event OnDeletePartHandler OnDeletePart = null;
 
     public List<PartTypeEntry> PartTypes {
         set {
@@ -61,12 +65,17 @@ public class PartsView : UserControl
         btnEditPart.Click += new EventHandler(btnEditPart_OnClick);
         tlp0.Controls.Add(btnEditPart, 2, 0);
 
+        btnDeletePart = new Button();
+        btnDeletePart.Text = "Delete Part";
+        btnDeletePart.Click += new EventHandler(btnDeletePart_OnClick);
+        tlp0.Controls.Add(btnDeletePart, 3, 0);
+
         dgv = new DataGridView();
         dgv.Dock = DockStyle.Fill;
         dgv.MultiSelect = false;
         dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         tlp0.Controls.Add(dgv, 0, 1);
-        tlp0.SetColumnSpan(dgv, 3);
+        tlp0.SetColumnSpan(dgv, 4);
 
         Util.FixTableLayoutStyles(tlp0);
         
@@ -104,6 +113,15 @@ public class PartsView : UserControl
             DataRowView view = (DataRowView)dgv.SelectedRows[0].DataBoundItem;
             DataRow row = view.Row;
             OnEditPart(row);
+        }
+    }
+
+    private void btnDeletePart_OnClick(object sender, EventArgs e)
+    {
+        if (OnDeletePart != null && dgv.SelectedRows.Count > 0) {
+            DataRowView view = (DataRowView)dgv.SelectedRows[0].DataBoundItem;
+            DataRow row = view.Row;
+            OnDeletePart(row);
         }
     }
 }
