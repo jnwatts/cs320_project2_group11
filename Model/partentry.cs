@@ -24,6 +24,15 @@ public class PartEntry
         }
     }
 
+    public PartEntry(PartEntry other)
+    {
+        this.Part_num = other.Part_num;
+        this.Part_type_id = other.Part_type_id;
+        this.Part_type = other.Part_type;
+        this.Attributes = new Dictionary<string, string>(other.Attributes);
+        this.ExtendedAttributes = new Dictionary<string, string>(other.ExtendedAttributes);
+    }
+
     public override String ToString()
     {
         string str = "{" + Part_num;
