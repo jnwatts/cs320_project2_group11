@@ -116,6 +116,13 @@ public class DbModel
             da.Fill(dt);
             da.Dispose();
             da = null;
+#if DEBUG
+            dt.TableName = "Result";
+            using(var writer = new System.IO.StringWriter()) {
+                dt.WriteXml(writer);
+                Console.WriteLine(writer.ToString());
+            }
+#endif
             message = String.Format("Returned {0} rows", dt.Rows.Count);
         } catch (Exception e) {
             result = e.Message;
