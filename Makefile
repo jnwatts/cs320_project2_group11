@@ -21,11 +21,15 @@ LIBS = dotnet
 
 all: $(TARGET)
 
+debug: DEFINES += DEBUG
+debug: all
+
 MCS ?= gmcs
 MONO ?= mono
 MONOFLAGS ?= -debug -target:exe
 MONOFLAGS += $(foreach lib,$(LIBS),-pkg:$(lib))
 MONOFLAGS += $(foreach ref,$(REFS),-r:$(ref))
+MONOFLAGS += $(foreach def,$(DEFINES),-d:$(def))
 
 $(TARGET): $(SOURCES)
 	$(MCS) $(MONOFLAGS) -out:"$@" $^ 
