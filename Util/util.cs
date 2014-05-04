@@ -66,4 +66,19 @@ public class Util
             attributes[col.ColumnName] = (row.IsNull(col) ? null : (string)row[col]);
         }
     }
+
+    public static DataTable AttributesToDataTable(string tableName, Dictionary<string, string> attributes)
+    {
+        DataTable dt = new DataTable();
+        dt.TableName = tableName;
+        foreach (KeyValuePair<string, string> entry in attributes) {
+            dt.Columns.Add(new DataColumn(entry.Key, typeof(string)));
+        }
+        DataRow row = dt.NewRow();
+        foreach (KeyValuePair<string, string> entry in attributes) {
+            row[entry.Key] = entry.Value;
+        }
+        dt.Rows.Add(row);
+        return dt;
+    }
 }
