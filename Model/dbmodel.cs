@@ -52,6 +52,9 @@ public class DbModel
 
     public string Execute(string sql, ResultHandler handler)
     {
+#if DEBUG
+        Console.WriteLine("Execute: {0}", sql);
+#endif
         string result = null;
         string message = null;
         DataTable dt = null;
