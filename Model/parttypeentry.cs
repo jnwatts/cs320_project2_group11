@@ -12,6 +12,12 @@ public class PartTypeEntry
         this.name = name;
     }
 
+    public PartTypeEntry(PartTypeEntry other)
+    {
+        this.typeId = other.typeId;
+        this.name = other.name;
+    }
+
     public override String ToString()
     {
         return name;
