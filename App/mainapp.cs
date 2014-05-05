@@ -30,6 +30,7 @@ public class MainApp : Form
         mv.RawSqlView.OnSQLExecute += SQLExecute;
         mv.PartsView.OnShowParts += ShowParts;
         mv.PartsView.OnEditPart += EditPart;
+        mv.PartEditView.OnSavePart += SavePart;
 
         pm.Load();
 
@@ -81,5 +82,10 @@ public class MainApp : Form
                 mv.PartEditView.Part = partEntry;
             }
         });
+    }
+
+    private void SavePart(PartEntry part)
+    {
+        dbm.UpdatePart(part);
     }
 }
