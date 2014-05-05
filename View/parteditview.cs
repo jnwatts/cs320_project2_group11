@@ -65,6 +65,7 @@ public class PartEditView : UserControl
         dgvAttributes.MultiSelect = false;
         dgvAttributes.AllowUserToAddRows = false;
         dgvAttributes.AllowUserToDeleteRows = false;
+        dgvAttributes.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(dgv_DataBindingComplete);
         tlp0.Controls.Add(dgvAttributes, 0, 1);
         tlp0.SetColumnSpan(dgvAttributes, 3);
 
@@ -73,12 +74,24 @@ public class PartEditView : UserControl
         dgvExtendedAttributes.MultiSelect = false;
         dgvExtendedAttributes.AllowUserToAddRows = false;
         dgvExtendedAttributes.AllowUserToDeleteRows = false;
+        dgvExtendedAttributes.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(dgv_DataBindingComplete);
         tlp0.Controls.Add(dgvExtendedAttributes, 0, 2);
         tlp0.SetColumnSpan(dgvExtendedAttributes, 3);
 
         Util.FixTableLayoutStyles(tlp0);
         
         this.ResumeLayout();
+    }
+
+    private void dgv_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+    {
+        DataGridView dgv = (DataGridView)sender;
+        if (dgv.Columns.Contains("Part_num")) {
+            dgv.Columns["Part_num"].Visible = false;
+        }
+        if (dgv.Columns.Contains("Part_type_id")) {
+            dgv.Columns["Part_type_id"].Visible = false;
+        }
     }
 
     public void Reset()
