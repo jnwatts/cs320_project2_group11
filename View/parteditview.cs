@@ -48,6 +48,12 @@ public class PartEditView : UserControl
         btnSave.Text = "Save";
         btnSave.Click += new EventHandler(delegate (object sender, EventArgs e) {
             if (OnSavePart != null) {
+                foreach (DataRow row in newPart.Attributes.Rows) {
+                    row.EndEdit();
+                }
+                foreach (DataRow row in newPart.ExtendedAttributes.Rows) {
+                    row.EndEdit();
+                }
                 OnSavePart(newPart);
             }
         });
