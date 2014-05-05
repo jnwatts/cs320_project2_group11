@@ -92,6 +92,53 @@ public class DbModel
         }
     }
 
+    public void UpdatePart(PartEntry part)
+    {
+        DataTable dt = null;
+        DataRow row = null;
+        MySqlCommand cmd = null;
+        int modifiedColumns = 0;
+
+        cmd = new MySqlCommand();
+        cmd.Connection = _con;
+
+        // Update parts table
+        dt = part.Attributes;
+        row = dt.Rows[0];
+        modifiedColumns = 0;
+        cmd.CommandType = System.Data.CommandType.Text;
+        cmd.CommandText = "UPDATE Parts SET";
+        foreach (DataColumn col in dt.Columns) {
+            if (col.DataType != typeof(string)) {
+                // For now, all attributes are strings. Ignore numerics.
+                continue;
+            } else if (col.ColumnName == "Part_num") {
+                // Don't change Part_num
+                continue;
+            }
+            string original = (string)row[col, DataRowVersion.Original];
+            string current = (string)row[col, DataRowVersion.Current];
+            if (original != current) {
+                cmd.CommandText += string.Format("{1}{0} = @{0}", col.ColumnName, (modifiedColumns++ > 0 ? ", " : " "));
+                cmd.Parameters.AddWithValue(string.Format("@{0}", col.ColumnName), current);
+            }
+        }
+        cmd.CommandText += " WHERE Part_num = @Part_num";
+        cmd.Parameters.AddWithValue("@Part_num", part.Part_num);
+#if DEBUG
+        Console.WriteLine("{0}", cmd.CommandText);
+        foreach (MySqlParameter p in cmd.Parameters) {
+            Console.WriteLine(" {0} = {1}", p.ParameterName, p.Value);
+        }
+#endif
+        cmd.ExecuteNonQuery();
+
+        // Update <type>_attributes
+        dt = part.ExtendedAttributes;
+        // Table name will be: string.Format("{0}_attributes", part.Part_type)
+        // TODO: Duplicate above to generate command and execute it
+    }
+
     public string Execute(string sql, ResultHandler handler)
     {
 #if DEBUG
