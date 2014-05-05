@@ -73,11 +73,8 @@ public class DbModel
             if (attributeResult.Rows.Count > 0) {
                 int typeId = (int)attributeResult.Rows[0]["Part_type_id"];
                 string typeName = GetPartType(typeId);
-                attributeResult.Columns.Remove("Part_num");
-                attributeResult.Columns.Remove("Part_type_id");
                 sql = "SELECT * FROM " + typeName + "_attributes WHERE Part_num = '" + Part_num + "'";
                 errMsg = Execute(sql, delegate(DataTable extendedResult, string extendedMessage, Exception extendedException) {
-                    extendedResult.Columns.Remove("Part_num");
                     PartEntry partEntry = new PartEntry(Part_num, typeId, typeName, attributeResult, extendedResult);
                     handler(partEntry);
                 });
