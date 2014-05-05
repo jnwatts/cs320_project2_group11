@@ -23,7 +23,7 @@ LIBS = dotnet
 
 all: $(TARGET)
 
-debug: DEFINES += DEBUG
+debug: DEFINES += DEBUG TRACE
 debug: all
 
 MCS ?= gmcs
