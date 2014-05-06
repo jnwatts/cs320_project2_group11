@@ -81,4 +81,14 @@ public class Util
         dt.Rows.Add(row);
         return dt;
     }
+
+    public static int PartNumberInteger(string Part_num)
+    {
+        return int.Parse(Part_num.Replace("D3-", ""));
+    }
+
+    public static string PartNumberString(int Part_num)
+    {
+        return "D3-" + Part_num.ToString("D7");
+    }
 }
