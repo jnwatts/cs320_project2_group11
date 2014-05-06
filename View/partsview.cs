@@ -11,11 +11,15 @@ public class PartsView : UserControl
     private ComboBox cbPartType = null;
     private List<PartTypeEntry> parttypes = null;
     private Button btnRefresh = null;
+    private Button btnNewPart = null;
     private Button btnEditPart = null;
     private Button btnDeletePart = null;
 
     public delegate void OnShowPartsHandler(PartTypeEntry partType);
     public event OnShowPartsHandler OnShowParts = null;
+
+    public delegate void OnNewPartHandler(PartTypeEntry partType);
+    public event OnNewPartHandler OnNewPart = null;
 
     public delegate void OnEditPartHandler(DataRow row);
     public event OnEditPartHandler OnEditPart = null;
@@ -72,15 +76,20 @@ public class PartsView : UserControl
         btnRefresh.Click += new EventHandler(btnRefresh_OnClick);
         tlp0.Controls.Add(btnRefresh, 1, 0);
 
+        btnNewPart = new Button();
+        btnNewPart.Text = "New Part";
+        btnNewPart.Click += new EventHandler(btnNewPart_OnClick);
+        tlp0.Controls.Add(btnNewPart, 2, 0);
+
         btnEditPart = new Button();
         btnEditPart.Text = "Edit Part";
         btnEditPart.Click += new EventHandler(btnEditPart_OnClick);
-        tlp0.Controls.Add(btnEditPart, 2, 0);
+        tlp0.Controls.Add(btnEditPart, 3, 0);
 
         btnDeletePart = new Button();
         btnDeletePart.Text = "Delete Part";
         btnDeletePart.Click += new EventHandler(btnDeletePart_OnClick);
-        tlp0.Controls.Add(btnDeletePart, 3, 0);
+        tlp0.Controls.Add(btnDeletePart, 4, 0);
 
         dgv = new DataGridView();
         dgv.Dock = DockStyle.Fill;
@@ -97,7 +106,7 @@ public class PartsView : UserControl
             }
         });
         tlp0.Controls.Add(dgv, 0, 1);
-        tlp0.SetColumnSpan(dgv, 4);
+        tlp0.SetColumnSpan(dgv, 5);
 
         Util.FixTableLayoutStyles(tlp0);
         
@@ -124,6 +133,13 @@ public class PartsView : UserControl
     private void btnRefresh_OnClick(object sender, EventArgs e)
     {
         this.RefreshParts();
+    }
+
+    private void btnNewPart_OnClick(object sender, EventArgs e)
+    {
+        if (OnNewPart != null) {
+            OnNewPart(this.SelectedPartType);
+        }
     }
 
     private void btnEditPart_OnClick(object sender, EventArgs e)

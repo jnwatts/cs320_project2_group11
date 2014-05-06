@@ -30,6 +30,8 @@ public class MainApp : Form
         mv.RawSqlView.OnSQLExecute += SQLExecute;
         mv.PartsView.OnShowParts += ShowParts;
         mv.PartsView.OnEditPart += EditPart;
+        mv.PartsView.OnNewPart += NewPart;
+        mv.PartsView.OnDeletePart += DeletePart;
         mv.PartEditView.OnSavePart += SavePart;
 
         pm.Load();
@@ -85,10 +87,22 @@ public class MainApp : Form
         });
     }
 
+    private void NewPart(PartTypeEntry partType)
+    {
+        dbm.NewPart(partType);
+        ShowParts(mv.PartsView.SelectedPartType);
+    }
+
     private void SavePart(PartEntry part)
     {
         dbm.UpdatePart(part);
         mv.ActiveTab = MainView.Tabs.Parts;
+        ShowParts(mv.PartsView.SelectedPartType);
+    }
+
+    private void DeletePart(DataRow row)
+    {
+        dbm.DeletePart((string)row["Part_num"]);
         ShowParts(mv.PartsView.SelectedPartType);
     }
 }

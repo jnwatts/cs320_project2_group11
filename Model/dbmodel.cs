@@ -92,6 +92,29 @@ public class DbModel
         }
     }
 
+    public void NewPart(PartTypeEntry partType)
+    {
+        string sql = "SELECT Part_num FROM Parts WHERE Part_type_id = " + partType.typeId + " ORDER BY Part_num DESC LIMIT 1";
+        string errMsg = Execute(sql, delegate(DataTable partNumResult, string message, Exception exception) {
+            if (partNumResult.Rows.Count > 0) {
+                DataRow row = partNumResult.Rows[0];
+                string Part_num = Util.PartNumberString(Util.PartNumberInteger((string)row["Part_num"]) + 1);
+#if DEBUG
+                Console.WriteLine("New part num: {0}", Part_num);
+#endif
+                sql = "INSERT INTO Parts (Part_num, Part_type_id) VALUES ('" + Part_num + "', " + partType.typeId + ")";
+                errMsg = Execute(sql, null);
+                if (errMsg != null) {
+                    Console.WriteLine("Warning: Failed to execute query '{0}'. Error returned: {1}", sql, errMsg);
+                    errMsg = null;
+                }
+            }
+        });
+        if (errMsg != null) {
+            Console.WriteLine("Warning: Failed to execute query '{0}'. Error returned: {1}", sql, errMsg);
+        }
+    }
+
     public void UpdatePart(PartEntry part)
     {
         DataTable dt = null;
@@ -142,6 +165,15 @@ public class DbModel
         // TODO: Duplicate above to generate command and execute it
     }
 
+    public void DeletePart(string Part_num)
+    {
+        string sql = "DELETE FROM Parts WHERE Part_num = '" + Part_num + "'";
+        string errMsg = Execute(sql, null);
+        if (errMsg != null) {
+            Console.WriteLine("Warning: Failed to execute query '{0}'. Error returned: {1}", sql, errMsg);
+        }
+    }
+
     public string Execute(string sql, ResultHandler handler)
     {
 #if DEBUG
@@ -174,7 +206,9 @@ public class DbModel
             message = result;
             exception = e;
         }
-        handler(dt, message, exception);
+        if (handler != null) {
+            handler(dt, message, exception);
+        }
         return result;
     }
 
