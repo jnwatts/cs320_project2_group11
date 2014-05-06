@@ -3,6 +3,7 @@ using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
+using System.Collections.Generic;
 
 public class MainView : Form
 {
@@ -15,6 +16,38 @@ public class MainView : Form
     PreferencesView pv = null;
     PartsView parts = null;
     PartEditView partEdit = null;
+
+    public enum Tabs {
+        RawSql,
+        Prefs,
+        Parts,
+        Edit
+    };
+
+    Tabs activeTab = Tabs.RawSql;
+
+    public Tabs ActiveTab {
+        get {
+            return activeTab;
+        }
+        set {
+            switch (value) {
+                case Tabs.RawSql:
+                    tabControl.SelectedTab = rsvTab;
+                    break;
+                case Tabs.Prefs:
+                    tabControl.SelectedTab = pvTab;
+                    break;
+                case Tabs.Parts:
+                    tabControl.SelectedTab = partsTab;
+                    break;
+                case Tabs.Edit:
+                    tabControl.SelectedTab = partEditTab;
+                    break;
+            }
+            activeTab = value;
+        }
+    }
 
     public PreferencesView PrefsView { get { return pv; } }
     public RawSqlView RawSqlView { get { return rsv; } }
@@ -32,6 +65,17 @@ public class MainView : Form
 
         tabControl = new TabControl();
         tabControl.Dock = DockStyle.Fill;
+        tabControl.Selected += new TabControlEventHandler(delegate (object sender, TabControlEventArgs e) {
+            if (e.TabPage == rsvTab) {
+                activeTab = Tabs.RawSql;
+            } else if (e.TabPage == rsvTab) {
+                activeTab = Tabs.Prefs;
+            } else if (e.TabPage == rsvTab) {
+                activeTab = Tabs.Parts;
+            } else if (e.TabPage == rsvTab) {
+                activeTab = Tabs.Edit;
+            }
+        });
         Controls.Add(tabControl);
 
         rsvTab = new TabPage("Raw SQL");
@@ -57,6 +101,7 @@ public class MainView : Form
         partEdit.Dock = DockStyle.Fill;
         partEditTab.Controls.Add(partEdit);
         tabControl.TabPages.Add(partEditTab);
+
 
         this.ResumeLayout();
     }
