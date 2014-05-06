@@ -10,7 +10,7 @@ public class PartsView : UserControl
     private DataGridView dgv = null;
     private ComboBox cbPartType = null;
     private List<PartTypeEntry> parttypes = null;
-    private Button btnShowParts = null;
+    private Button btnRefresh = null;
     private Button btnEditPart = null;
     private Button btnDeletePart = null;
 
@@ -42,6 +42,15 @@ public class PartsView : UserControl
         }
     }
 
+    public PartTypeEntry SelectedPartType {
+        get {
+            return (PartTypeEntry)cbPartType.SelectedItem;
+        }
+        set {
+            cbPartType.SelectedItem = value;
+        }
+    }
+
     public PartsView()
     {
         this.SuspendLayout();
@@ -52,13 +61,16 @@ public class PartsView : UserControl
 
         cbPartType = new ComboBox();
         cbPartType.DropDownStyle = ComboBoxStyle.DropDownList;
+        cbPartType.SelectedIndexChanged += new EventHandler(delegate (object sender, EventArgs e) {
+            this.RefreshParts();
+        });
         tlp0.RowCount++;
         tlp0.Controls.Add(cbPartType, 0, 0);
 
-        btnShowParts = new Button();
-        btnShowParts.Text = "Show Parts";
-        btnShowParts.Click += new EventHandler(btnShowParts_OnClick);
-        tlp0.Controls.Add(btnShowParts, 1, 0);
+        btnRefresh = new Button();
+        btnRefresh.Text = "Refresh";
+        btnRefresh.Click += new EventHandler(btnRefresh_OnClick);
+        tlp0.Controls.Add(btnRefresh, 1, 0);
 
         btnEditPart = new Button();
         btnEditPart.Text = "Edit Part";
@@ -99,12 +111,9 @@ public class PartsView : UserControl
         }
     }
 
-    private void btnShowParts_OnClick(object sender, EventArgs e)
+    private void btnRefresh_OnClick(object sender, EventArgs e)
     {
-        if (OnShowParts != null) {
-            PartTypeEntry partType = (PartTypeEntry)cbPartType.SelectedItem;
-            OnShowParts(partType);
-        }
+        this.RefreshParts();
     }
 
     private void btnEditPart_OnClick(object sender, EventArgs e)
@@ -122,6 +131,13 @@ public class PartsView : UserControl
             DataRowView view = (DataRowView)dgv.SelectedRows[0].DataBoundItem;
             DataRow row = view.Row;
             OnDeletePart(row);
+        }
+    }
+
+    public void RefreshParts()
+    {
+        if (OnShowParts != null) {
+            OnShowParts(this.SelectedPartType);
         }
     }
 }
