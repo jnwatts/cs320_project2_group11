@@ -86,6 +86,9 @@ public class PartsView : UserControl
         dgv.Dock = DockStyle.Fill;
         dgv.MultiSelect = false;
         dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+        dgv.AllowUserToAddRows = false;
+        dgv.AllowUserToDeleteRows = false;
+        dgv.ReadOnly = true;
         tlp0.Controls.Add(dgv, 0, 1);
         tlp0.SetColumnSpan(dgv, 4);
 
