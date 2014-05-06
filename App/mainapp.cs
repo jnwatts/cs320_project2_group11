@@ -80,6 +80,7 @@ public class MainApp : Form
         dbm.GetPart((string)row["Part_num"], delegate(PartEntry partEntry) {
             if (partEntry != null) {
                 mv.PartEditView.Part = partEntry;
+                mv.ActiveTab = MainView.Tabs.Edit;
             }
         });
     }
@@ -87,5 +88,6 @@ public class MainApp : Form
     private void SavePart(PartEntry part)
     {
         dbm.UpdatePart(part);
+        mv.ActiveTab = MainView.Tabs.Parts;
     }
 }
