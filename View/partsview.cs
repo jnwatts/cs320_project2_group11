@@ -89,6 +89,13 @@ public class PartsView : UserControl
         dgv.AllowUserToAddRows = false;
         dgv.AllowUserToDeleteRows = false;
         dgv.ReadOnly = true;
+        dgv.CellDoubleClick += new DataGridViewCellEventHandler(delegate (object sender, DataGridViewCellEventArgs e) {
+            if (OnEditPart != null) {
+                DataRowView view = (DataRowView)dgv.Rows[e.RowIndex].DataBoundItem;
+                DataRow row = view.Row;
+                OnEditPart(row);
+            }
+        });
         tlp0.Controls.Add(dgv, 0, 1);
         tlp0.SetColumnSpan(dgv, 4);
 
