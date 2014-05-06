@@ -123,15 +123,18 @@ public class DbModel
                 cmd.Parameters.AddWithValue(string.Format("@{0}", col.ColumnName), current);
             }
         }
-        cmd.CommandText += " WHERE Part_num = @Part_num";
-        cmd.Parameters.AddWithValue("@Part_num", part.Part_num);
+        // Only finish the update if there was anything to update ;-)
+        if (cmd.Parameters.Count > 0) {
+            cmd.CommandText += " WHERE Part_num = @Part_num";
+            cmd.Parameters.AddWithValue("@Part_num", part.Part_num);
 #if DEBUG
-        Console.WriteLine("{0}", cmd.CommandText);
-        foreach (MySqlParameter p in cmd.Parameters) {
-            Console.WriteLine(" {0} = {1}", p.ParameterName, p.Value);
-        }
+            Console.WriteLine("{0}", cmd.CommandText);
+            foreach (MySqlParameter p in cmd.Parameters) {
+                Console.WriteLine(" {0} = {1}", p.ParameterName, p.Value);
+            }
 #endif
-        cmd.ExecuteNonQuery();
+            cmd.ExecuteNonQuery();
+        }
 
         // Update <type>_attributes
         dt = part.ExtendedAttributes;
