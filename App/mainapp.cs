@@ -89,5 +89,6 @@ public class MainApp : Form
     {
         dbm.UpdatePart(part);
         mv.ActiveTab = MainView.Tabs.Parts;
+        ShowParts(mv.PartsView.SelectedPartType);
     }
 }
