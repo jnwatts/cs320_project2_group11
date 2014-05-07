@@ -116,6 +116,7 @@ public class PartsView : UserControl
                 OnEditPart(row);
             }
         });
+        tlp0.RowCount++;
         tlp0.Controls.Add(dgv, 0, 1);
         tlp0.SetColumnSpan(dgv, 5);
 
