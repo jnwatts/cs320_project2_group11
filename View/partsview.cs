@@ -109,6 +109,7 @@ public class PartsView : UserControl
         dgv.AllowUserToAddRows = false;
         dgv.AllowUserToDeleteRows = false;
         dgv.ReadOnly = true;
+        dgv.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(dgv_DataBindingComplete);
         dgv.CellDoubleClick += new DataGridViewCellEventHandler(delegate (object sender, DataGridViewCellEventArgs e) {
             if (OnEditPart != null) {
                 DataRowView view = (DataRowView)dgv.Rows[e.RowIndex].DataBoundItem;
@@ -139,6 +140,17 @@ public class PartsView : UserControl
             if (index < cbPartType.Items.Count) {
                 cbPartType.SelectedIndex = index;
             }
+        }
+    }
+
+    private void dgv_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+    {
+        DataGridView dgv = (DataGridView)sender;
+        if (dgv.Columns.Contains("Part_type_id")) {
+            dgv.Columns["Part_type_id"].Visible = false;
+        }
+        if (dgv.Columns.Contains("Type")) {
+            dgv.Columns["Type"].Visible = false;
         }
     }
 
