@@ -38,9 +38,20 @@ public class PartsView : UserControl
     {
         set {
             if (dgv != null) {
+                int index = 0;
+                if (dgv.SelectedRows.Count > 0) {
+                    index = dgv.SelectedRows[0].Index;
+                }
                 dgv.DataSource = value;
                 if (dgv.Rows.Count > 0) {
-                    dgv.Rows[0].Selected = true;
+                    if (index >= dgv.Rows.Count) {
+                        index = dgv.Rows.Count - 1;
+                    }
+                    if (index > 0) {
+                        dgv.Rows[0].Selected = false;
+                    }
+                    dgv.Rows[index].Selected = true;
+                    dgv.CurrentCell = dgv.Rows[index].Cells[0];
                 }
             }
         }
