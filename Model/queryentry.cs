@@ -28,6 +28,10 @@ public class QueryEntry
             "SELECT * FROM Vendor_parts AS VP INNER JOIN Manufacturers AS M ON VP.Manufacturer_id = M.Manufacturer_id INNER JOIN Vendors AS V ON VP.Vendor_id = V.Vendor_id;"));
         QueryList.Add(new QueryEntry("Manufacturers and parts","SELECT * FROM Vendor_parts AS VP RIGHT OUTER JOIN Manufacturers AS M ON VP.Manufacturer_id = M.Manufacturer_id;"));
         QueryList.Add(new QueryEntry("Parts w/ type attributes", "SELECT * FROM Parts AS P NATURAL LEFT JOIN Capacitor_attributes AS A NATURAL LEFT JOIN Part_types AS T WHERE T.Type = 'Capacitor'"));
+        QueryList.Add(new QueryEntry("Find parts with no vendor supplier", "SELECT Part_num, Type, Description FROM Parts AS P NATURAL JOIN Part_types WHERE P.Part_num NOT IN (SELECT Part_num FROM Vendor_parts) ORDER BY Part_num, Part_type_id"));
+        QueryList.Add(new QueryEntry("Find parts with no pricing information", "SELECT Part_num, Type, Description FROM Parts AS P NATURAL JOIN Part_types WHERE P.Part_num NOT IN (SELECT Part_num FROM Vendor_price_breaks) ORDER BY Part_num, Part_type_id"));
+        QueryList.Add(new QueryEntry("Find parts with no matching tuple in extended attributes", " SELECT Part_num, Type, Description FROM Parts AS P NATURAL JOIN Part_types WHERE P.Part_num NOT IN ( SELECT Part_num FROM Capacitor_attributes UNION SELECT Part_num FROM Connector_attributes UNION SELECT Part_num FROM Memory_attributes ) ORDER BY Part_num, Part_type_id; "));
+
 
         return QueryList;
     }
