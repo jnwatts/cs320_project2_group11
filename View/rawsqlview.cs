@@ -53,7 +53,7 @@ public class RawSqlView : UserControl
         tlp0.Controls.Add(btnExecute);
 
         dropDown = new ComboBox();
-        dropDown.Width *= 2;
+        dropDown.Width *= 3;
 
         dropDownList = QueryEntry.CreateQueries();
 
