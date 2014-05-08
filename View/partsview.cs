@@ -51,7 +51,10 @@ public class PartsView : UserControl
                         dgv.Rows[0].Selected = false;
                     }
                     dgv.Rows[index].Selected = true;
-                    dgv.CurrentCell = dgv.Rows[index].Cells[0];
+                    if (dgv.Rows[index].Cells[0].Visible)
+                    {
+                        dgv.CurrentCell = dgv.Rows[index].Cells[0];
+                    }
                 }
             }
         }
