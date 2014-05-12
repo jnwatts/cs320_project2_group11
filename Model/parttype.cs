@@ -1,18 +1,18 @@
 using System;
 using System.Data;
 
-public class PartTypeEntry
+public class PartType
 {
     public int typeId { get; set; }
     public String name { get; set; }
 
-    public PartTypeEntry(int typeId, String name)
+    public PartType(int typeId, String name)
     {
         this.typeId = typeId;
         this.name = name;
     }
 
-    public PartTypeEntry(PartTypeEntry other)
+    public PartType(PartType other)
     {
         this.typeId = other.typeId;
         this.name = other.name;

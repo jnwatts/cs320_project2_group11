@@ -2,7 +2,7 @@ using System;
 using System.Data;
 using System.Collections.Generic;
 
-public class PartEntry
+public class Part
 {
     public string Part_num { get; set; }
     public int Part_type_id { get; set; }
@@ -10,7 +10,7 @@ public class PartEntry
     public DataTable Attributes;
     public DataTable ExtendedAttributes;
 
-    public PartEntry(string Part_num, int Part_type_id, string Part_type, DataTable attributes, DataTable extendedAttributes)
+    public Part(string Part_num, int Part_type_id, string Part_type, DataTable attributes, DataTable extendedAttributes)
     {
         this.Part_num = Part_num;
         this.Part_type_id = Part_type_id;
@@ -19,7 +19,7 @@ public class PartEntry
         this.ExtendedAttributes = extendedAttributes;
     }
 
-    public PartEntry(PartEntry other)
+    public Part(Part other)
     {
         this.Part_num = other.Part_num;
         this.Part_type_id = other.Part_type_id;
