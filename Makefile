@@ -4,7 +4,8 @@ TARGET = cs320_project2_group11.exe
 
 SOURCES = \
 	App/mainapp.cs \
-    Model/dbmodel.cs \
+    Model/partsdb.cs \
+    Model/mysqlpartsdb.cs \
     Model/preferencesmodel.cs \
     Model/parttype.cs \
     Model/part.cs \
