@@ -9,16 +9,16 @@ public class PartsView : UserControl
     private TableLayoutPanel tlp0 = null;
     private DataGridView dgv = null;
     private ComboBox cbPartType = null;
-    private List<PartTypeEntry> parttypes = null;
+    private List<PartType> parttypes = null;
     private Button btnRefresh = null;
     private Button btnNewPart = null;
     private Button btnEditPart = null;
     private Button btnDeletePart = null;
 
-    public delegate void OnShowPartsHandler(PartTypeEntry partType);
+    public delegate void OnShowPartsHandler(PartType partType);
     public event OnShowPartsHandler OnShowParts = null;
 
-    public delegate void OnNewPartHandler(PartTypeEntry partType);
+    public delegate void OnNewPartHandler(PartType partType);
     public event OnNewPartHandler OnNewPart = null;
 
     public delegate void OnEditPartHandler(DataRow row);
@@ -27,7 +27,7 @@ public class PartsView : UserControl
     public delegate void OnDeletePartHandler(DataRow row);
     public event OnDeletePartHandler OnDeletePart = null;
 
-    public List<PartTypeEntry> PartTypes {
+    public List<PartType> PartTypes {
         set {
             parttypes = value;
             updatePartTypes();
@@ -60,9 +60,9 @@ public class PartsView : UserControl
         }
     }
 
-    public PartTypeEntry SelectedPartType {
+    public PartType SelectedPartType {
         get {
-            return (PartTypeEntry)cbPartType.SelectedItem;
+            return (PartType)cbPartType.SelectedItem;
         }
         set {
             cbPartType.SelectedItem = value;
@@ -134,7 +134,7 @@ public class PartsView : UserControl
         int index = cbPartType.SelectedIndex;
         cbPartType.Items.Clear();
         if (parttypes != null) {
-            foreach (PartTypeEntry pt in parttypes) {
+            foreach (PartType pt in parttypes) {
                 cbPartType.Items.Add(pt);
             }
             if (index < 0) {

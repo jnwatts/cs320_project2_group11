@@ -14,7 +14,7 @@ public class RawSqlView : UserControl
     private TextBox tCmd = null;
     private DataGridView g = null;
 
-    private List<QueryEntry> dropDownList;
+    private List<Query> dropDownList;
 
     public delegate void SQLExecuteHandler(string command);
     public event SQLExecuteHandler OnSQLExecute = null;
@@ -55,7 +55,7 @@ public class RawSqlView : UserControl
         dropDown = new ComboBox();
         dropDown.Width *= 3;
 
-        dropDownList = QueryEntry.CreateQueries();
+        dropDownList = Query.CreateQueries();
 
         dropDown.DataSource = dropDownList;
         dropDown.SelectedValueChanged +=

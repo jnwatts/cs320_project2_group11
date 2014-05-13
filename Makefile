@@ -6,9 +6,9 @@ SOURCES = \
 	App/mainapp.cs \
     Model/dbmodel.cs \
     Model/preferencesmodel.cs \
-    Model/parttypeentry.cs \
-    Model/partentry.cs \
-    Model/queryentry.cs \
+    Model/parttype.cs \
+    Model/part.cs \
+    Model/query.cs \
     View/mainview.cs \
     View/preferencesview.cs \
     View/rawsqlview.cs \

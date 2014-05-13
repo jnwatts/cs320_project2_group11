@@ -13,13 +13,13 @@ public class PartEditView : UserControl
     private DataGridView dgvAttributes = null;
     private DataGridView dgvExtendedAttributes = null;
 
-    private PartEntry origPart = null;
-    private PartEntry newPart = null;
+    private Part origPart = null;
+    private Part newPart = null;
 
-    public delegate void OnSavePartHandler(PartEntry partEntry);
+    public delegate void OnSavePartHandler(Part part);
     public event OnSavePartHandler OnSavePart = null;
 
-    public PartEntry Part {
+    public Part Part {
         get {
             return newPart;
         }
@@ -103,7 +103,7 @@ public class PartEditView : UserControl
     public void Reset()
     {
         if (origPart != null) {
-            newPart = new PartEntry(origPart);
+            newPart = new Part(origPart);
             txtPart.Text = newPart.Part_num + ", " + newPart.Part_type;
             dgvAttributes.DataSource = newPart.Attributes;
             dgvExtendedAttributes.DataSource = newPart.ExtendedAttributes;
