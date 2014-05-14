@@ -19,13 +19,26 @@ public class Part
         this.ExtendedAttributes = extendedAttributes;
     }
 
+    public Part(string Part_num, int Part_type_id, string Part_type, DataTable attributes)
+    {
+        this.Part_num = Part_num;
+        this.Part_type_id = Part_type_id;
+        this.Part_type = Part_type;
+        this.Attributes = attributes;
+        this.ExtendedAttributes = null;
+    }
+
     public Part(Part other)
     {
         this.Part_num = other.Part_num;
         this.Part_type_id = other.Part_type_id;
         this.Part_type = other.Part_type;
         this.Attributes = other.Attributes.Copy();
-        this.ExtendedAttributes = other.ExtendedAttributes.Copy();
+        if (other.ExtendedAttributes != null) {
+            this.ExtendedAttributes = other.ExtendedAttributes.Copy();
+        } else {
+            this.ExtendedAttributes = null;
+        }
     }
 
     public override String ToString()
@@ -43,10 +56,12 @@ public class Part
             }
         }
 
-        if (ExtendedAttributes.Rows.Count > 0) {
-            row = ExtendedAttributes.Rows[0];
-            foreach (DataColumn col in ExtendedAttributes.Columns) {
-                str += ", " + col.ColumnName + ": " + (string)row[col];
+        if (ExtendedAttributes != null) {
+            if (ExtendedAttributes.Rows.Count > 0) {
+                row = ExtendedAttributes.Rows[0];
+                foreach (DataColumn col in ExtendedAttributes.Columns) {
+                    str += ", " + col.ColumnName + ": " + (string)row[col];
+                }
             }
         }
 

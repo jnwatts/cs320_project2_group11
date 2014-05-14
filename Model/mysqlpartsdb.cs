@@ -52,25 +52,20 @@ public class MySqlPartsDb : PartsDb
     public override void GetPart(string Part_num, PartHandler handler, ErrorHandler errorHandler)
     {
         //TODO: Move this logic into a stored procedure
-        string sql = "SELECT * FROM Parts WHERE Part_num = '" + Part_num + "'";
-        Execute(sql, delegate(DataTable attributeResult) {
-            if (attributeResult.Rows.Count > 0) {
-                int typeId = (int)attributeResult.Rows[0]["Part_type_id"];
-                sql = "SELECT Type FROM Part_types WHERE Part_type_id = " + typeId;
-                Execute(sql, delegate(DataTable typeResult) {
-                    string typeName = (string)typeResult.Rows[0]["Type"];
-                    sql = "SELECT * FROM " + typeName + "_attributes WHERE Part_num = '" + Part_num + "'";
-                    Execute(sql, delegate(DataTable extendedResult) {
-                        Part part = new Part(Part_num, typeId, typeName, attributeResult, extendedResult);
-                        if (handler != null) {
-                            handler(part);
-                        }
-                    }, errorHandler);
-                }, errorHandler);
-            } else {
-                // Part doesn't exist, call handler with null
-                handler(null);
-            }
+        string sql = "SELECT Part_type_id, Type FROM Parts NATURAL LEFT JOIN Part_types WHERE Part_num = '" + Part_num + "'";
+        Execute(sql, delegate(DataTable typeResult) {
+            int typeId = (int)typeResult.Rows[0]["Part_type_id"];
+            string typeName = (string)typeResult.Rows[0]["Type"];
+            sql = "SELECT * FROM Parts AS P NATURAL LEFT JOIN " + typeName + "_attributes AS A WHERE P.Part_type_id = " + typeId + " AND Part_num = '" + Part_num + "'";
+            Execute(sql, delegate(DataTable partResult) {
+                Part part = null;
+                if (partResult.Rows.Count > 0) {
+                    part = new Part(Part_num, typeId, typeName, partResult);
+                }
+                if (handler != null) {
+                    handler(part);
+                }
+            }, errorHandler);
         }, errorHandler);
     }
 

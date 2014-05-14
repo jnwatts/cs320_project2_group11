@@ -11,7 +11,6 @@ public class PartEditView : UserControl
     private Button btnSave = null;
     private Button btnReset = null;
     private DataGridView dgvAttributes = null;
-    private DataGridView dgvExtendedAttributes = null;
 
     private Part origPart = null;
     private Part newPart = null;
@@ -51,9 +50,6 @@ public class PartEditView : UserControl
                 foreach (DataRow row in newPart.Attributes.Rows) {
                     row.EndEdit();
                 }
-                foreach (DataRow row in newPart.ExtendedAttributes.Rows) {
-                    row.EndEdit();
-                }
                 OnSavePart(newPart);
             }
         });
@@ -74,15 +70,6 @@ public class PartEditView : UserControl
         dgvAttributes.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(dgv_DataBindingComplete);
         tlp0.Controls.Add(dgvAttributes, 0, 1);
         tlp0.SetColumnSpan(dgvAttributes, 3);
-
-        dgvExtendedAttributes = new DataGridView();
-        dgvExtendedAttributes.Dock = DockStyle.Top;
-        dgvExtendedAttributes.MultiSelect = false;
-        dgvExtendedAttributes.AllowUserToAddRows = false;
-        dgvExtendedAttributes.AllowUserToDeleteRows = false;
-        dgvExtendedAttributes.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(dgv_DataBindingComplete);
-        tlp0.Controls.Add(dgvExtendedAttributes, 0, 2);
-        tlp0.SetColumnSpan(dgvExtendedAttributes, 3);
 
         Util.FixTableLayoutStyles(tlp0);
         
@@ -106,7 +93,6 @@ public class PartEditView : UserControl
             newPart = new Part(origPart);
             txtPart.Text = newPart.Part_num + ", " + newPart.Part_type;
             dgvAttributes.DataSource = newPart.Attributes;
-            dgvExtendedAttributes.DataSource = newPart.ExtendedAttributes;
         }
     }
 }
