@@ -9,8 +9,13 @@ public class MySqlPartsDb : PartsDb
 
     private MySqlConnection _con = null;
 
+    private Dictionary<string, DataTable> tableSchemas;
+
+    private readonly string[] stringTypes = new string[] {"CHAR", "VARCHAR", "BINARY", "VARBINARY", "BLOB", "TEXT", "ENUM", "SET"};
+
     public MySqlPartsDb()
     {
+        tableSchemas = new Dictionary<string, DataTable>();
         Username = "";
         Password = "";
         Hostname = "";
@@ -82,109 +87,27 @@ public class MySqlPartsDb : PartsDb
 
     public override void UpdatePart(Part part, ErrorHandler errorHandler)
     {
-        DataTable dt = null;
-        DataRow row = null;
         MySqlCommand cmd = null;
-        int modifiedColumns = 0;
-
-        /* TODO: Part will soon have only a flat set of attribute columns.
-         *  Read schema (perhaps cached earlier?) and determine which columns go back to which table.
-         *  We get inside knowledge on which 2 tables to examine (Parts and <type>_attributes), but
-         *  both may change their columns in the future.
-         *
-         *  Extra credit: Identify and ignore primary key and foreign key columns?
-         */
 
         try {
-            cmd = new MySqlCommand();
-            cmd.Connection = _con;
-
-            // Update parts table
-            dt = part.Attributes;
-            row = dt.Rows[0];
-            modifiedColumns = 0;
-            cmd.CommandType = System.Data.CommandType.Text;
-            cmd.CommandText = "UPDATE Parts SET";
-            foreach (DataColumn col in dt.Columns) {
-                if (col.DataType != typeof(string)) {
-                    // For now, all attributes are strings. Ignore numerics.
-                    continue;
-                } else if (col.ColumnName == "Part_num") {
-                    // Don't change Part_num
-                    continue;
-                }
-                string original = (string)row[col, DataRowVersion.Original];
-                string current = (string)row[col, DataRowVersion.Current];
-                if (original != current) {
-                    cmd.CommandText += string.Format("{1}{0} = @{0}", col.ColumnName, (modifiedColumns++ > 0 ? ", " : " "));
-                    cmd.Parameters.AddWithValue(string.Format("@{0}", col.ColumnName), current);
-                }
-            }
-            // Only finish the update if there was anything to update ;-)
-            if (cmd.Parameters.Count > 0) {
-                cmd.CommandText += " WHERE Part_num = @Part_num";
-                cmd.Parameters.AddWithValue("@Part_num", part.Part_num);
+            cmd = BuildUpdateCommand("Parts", part.Attributes);
+            if (cmd != null) {
+                cmd.Connection = _con;
 #if DEBUG
-                Console.WriteLine("{0}", cmd.CommandText);
-                foreach (MySqlParameter p in cmd.Parameters) {
-                    Console.WriteLine(" {0} = {1}", p.ParameterName, p.Value);
-                }
+                Console.WriteLine(Util.SqlCommandToString(cmd));
 #endif
                 cmd.ExecuteNonQuery();
             }
-
-            // Update <type>_attributes
-            dt = part.ExtendedAttributes;
-            // Table name will be: string.Format("{0}_attributes", part.Part_type)
-            // TODO: Duplicate above to generate command and execute it
-            row = dt.Rows[0];
-            modifiedColumns = 0;
-            cmd.CommandType = System.Data.CommandType.Text;
-            string table = string.Format("{0}_attributes", part.Part_type);
-            cmd.CommandText = string.Format("UPDATE {0} SET",table);
-            foreach (DataColumn col in dt.Columns)
-            {
-                if (col.DataType != typeof(string))
-                {
-                    // For now, all attributes are strings. Ignore numerics.
-                    continue;
-                }
-                else if (col.ColumnName == "Part_num")
-                {
-                    // Don't change Part_num
-                    continue;
-                }
-                string original = "";
-                if(! DBNull.Value.Equals(row[col, DataRowVersion.Original]) )
-                {
-                    original = (string)row[col, DataRowVersion.Original];
-                }
-                string current = "";
-                if (!DBNull.Value.Equals(row[col, DataRowVersion.Current]) )
-                {
-                    current = (string)row[col, DataRowVersion.Current];
-                }
-                if (original != current)
-                {
-                    cmd.CommandText += string.Format("{1}{0} = @{0}", col.ColumnName, (modifiedColumns++ > 0 ? ", " : " "));
-                    cmd.Parameters.AddWithValue(string.Format("@{0}", col.ColumnName), current);
-                }
-            }
-            // Only finish the update if there was anything to update ;-)
-            if (cmd.Parameters.Count > 0)
-            {
-                cmd.CommandText += " WHERE Part_num = @Part_num";
-                cmd.Parameters.AddWithValue("@Part_num", part.Part_num);
+            cmd = BuildUpdateCommand(string.Format("{0}_attributes", part.Part_type), part.Attributes);
+            if (cmd != null) {
+                cmd.Connection = _con;
 #if DEBUG
-                Console.WriteLine("{0}", cmd.CommandText);
-                foreach (MySqlParameter p in cmd.Parameters)
-                {
-                    Console.WriteLine(" {0} = {1}", p.ParameterName, p.Value);
-                }
+                Console.WriteLine(Util.SqlCommandToString(cmd));
 #endif
                 cmd.ExecuteNonQuery();
             }
         } catch (Exception e) {
+            Console.WriteLine(e);
             if (errorHandler != null) {
                 errorHandler(e.Message, e);
             }
@@ -253,5 +176,77 @@ public class MySqlPartsDb : PartsDb
             }
         }
         return null;
+    }
+
+    private DataTable GetSchema(string tableName)
+    {
+        if (!tableSchemas.ContainsKey(tableName)) {
+            string errMsg;
+            if ((errMsg = Connect()) != null) {
+                Console.WriteLine("Error while connecting: {0}", errMsg);
+                return null;
+            }
+            tableSchemas[tableName] = _con.GetSchema("Columns", new string[] { null, null, tableName, null });
+        }
+        return tableSchemas[tableName];
+    }
+
+    private MySqlCommand BuildUpdateCommand(string tableName, DataTable attributes)
+    {
+        if (attributes == null || attributes.Rows.Count <= 0) {
+            return null;
+        }
+        DataRow row = attributes.Rows[0];
+        DataTable tableSchema = this.GetSchema(tableName);
+        MySqlCommand cmd = new MySqlCommand();
+        MySqlCommandBuilder bld = new MySqlCommandBuilder();
+        int modifiedColumns = 0;
+        int whereColumns = 0;
+        string tableNameEscaped = bld.QuoteIdentifier(tableName);
+        string sqlBody = "";
+        string sqlWhere = "WHERE";
+        sqlBody = string.Format("UPDATE {0} SET", tableNameEscaped);
+        foreach (DataRow schemaColumn in tableSchema.Rows) {
+            string columnKey = (string)schemaColumn["COLUMN_KEY"];
+            string columnName = (string)schemaColumn["COLUMN_NAME"];
+            string dataType = (string)schemaColumn["DATA_TYPE"];
+            string columnNameEscaped = bld.QuoteIdentifier(columnName);
+            if (columnKey.Length > 0) {
+                if (columnKey == "PRI") {
+                    // Add WHERE clause to satisfy PRImary key
+                    if (attributes.Columns.Contains(columnName)) {
+                        object originalValue = row[columnName, DataRowVersion.Original];
+                        string paramName = "@w" + modifiedColumns.ToString();
+                        sqlWhere += string.Format("{2}{0} = {1}", columnNameEscaped, paramName, (whereColumns++ > 0 ? " AND " : " "));
+                        cmd.Parameters.AddWithValue(paramName, originalValue);
+                    }
+                }
+                // Never update any UNIque, PRImary or MULty-key columns
+                continue;
+            }
+            if (Array.IndexOf(stringTypes, dataType.ToUpper()) < 0) {
+                // For now, ignore non-string parameters
+                continue;
+            }
+            if (attributes.Columns.Contains(columnName)) {
+                object orignalObject = row[columnName, DataRowVersion.Original];
+                object currentObject = row[columnName, DataRowVersion.Current];
+                string originalValue = Convert.IsDBNull(orignalObject) ? "" : (string)orignalObject;
+                string currentValue = Convert.IsDBNull(currentObject) ? "" : (string)currentObject;
+                if (originalValue != currentValue) {
+                    // Add SET expression
+                    string paramName = "@p" + modifiedColumns.ToString();
+                    sqlBody += string.Format("{2}{0} = {1}", columnNameEscaped, paramName, (modifiedColumns++ > 0 ? ", " : " "));
+                    cmd.Parameters.AddWithValue(paramName, currentValue);
+                }
+            }
+        }
+        cmd.CommandType = System.Data.CommandType.Text;
+        cmd.CommandText = string.Format("{0} {1}", sqlBody, sqlWhere);
+        if (modifiedColumns > 0) {
+            return cmd;
+        } else {
+            return null;
+        }
     }
 }
