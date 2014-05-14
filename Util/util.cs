@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Data.SqlClient;
 using System.Windows.Forms;
 using System.Collections.Generic;
 
@@ -90,5 +91,19 @@ public class Util
     public static string PartNumberString(int Part_num)
     {
         return "D3-" + Part_num.ToString("D7");
+    }
+
+    public static string SqlCommandToString(IDbCommand cmd)
+    {
+        string str;
+        if (cmd == null) {
+            str = "null";
+        } else {
+            str = cmd.CommandText;
+            foreach (IDataParameter p in cmd.Parameters) {
+                str = str.Replace(p.ParameterName, p.Value.ToString());
+            }
+        }
+        return str;
     }
 }
