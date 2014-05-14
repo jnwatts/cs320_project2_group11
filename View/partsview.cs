@@ -125,6 +125,7 @@ public class PartsView : UserControl
         dgv.Dock = DockStyle.Fill;
         dgv.MultiSelect = false;
         dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+        dgv.RowHeadersVisible = false;
         dgv.AllowUserToAddRows = false;
         dgv.AllowUserToDeleteRows = false;
         dgv.ReadOnly = true;
@@ -167,11 +168,12 @@ public class PartsView : UserControl
     private void dgv_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
     {
         DataGridView dgv = (DataGridView)sender;
+        dgv.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
         if (dgv.Columns.Contains("Part_type_id")) {
-            dgv.Columns["Part_type_id"].Visible = false;
+            dgv.Columns.Remove("Part_type_id");
         }
         if (dgv.Columns.Contains("Type")) {
-            dgv.Columns["Type"].Visible = false;
+            dgv.Columns.Remove("Type");
         }
     }
 
