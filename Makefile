@@ -9,6 +9,7 @@ SOURCES = \
     Model/preferencesmodel.cs \
     Model/parttype.cs \
     Model/part.cs \
+    Model/partcollection.cs \
     Model/query.cs \
     View/mainview.cs \
     View/preferencesview.cs \
