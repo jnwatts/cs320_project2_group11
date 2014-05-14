@@ -6,12 +6,6 @@ using System.Collections.Generic;
 public class MySqlPartsDb : PartsDb
 {
     public delegate void ResultHandler(DataTable result);
-    /*
-    public string Username { get; set; }
-    public string Password { get; set; }
-    public string Hostname { get; set; }
-    public string Database { get; set; }
-    */
 
     private MySqlConnection _con = null;
 
