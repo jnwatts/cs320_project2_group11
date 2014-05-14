@@ -60,6 +60,13 @@ public class PartsView : UserControl
         }
     }
 
+    public PartCollection Parts
+    {
+        set {
+            DataSource = value.DataSource;
+        }
+    }
+
     public PartType SelectedPartType {
         get {
             return (PartType)cbPartType.SelectedItem;
