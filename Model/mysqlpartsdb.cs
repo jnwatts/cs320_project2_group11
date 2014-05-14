@@ -40,14 +40,9 @@ public class MySqlPartsDb : PartsDb
 
     public override void GetParts(PartType partType, PartsHandler partsHandler, ErrorHandler errorHandler)
     {
-        string sql = "SELECT Part_num FROM Parts WHERE Part_type_id = " + partType.typeId;
+        string sql = "SELECT * FROM Parts AS P NATURAL LEFT JOIN " + partType.name + "_attributes AS A WHERE P.Part_type_id = " + partType.typeId;
         Execute(sql, delegate(DataTable result) {
-            List<Part> parts = new List<Part>();
-            foreach (DataRow row in result.Rows) {
-                GetPart((string)row["Part_num"], delegate(Part part) {
-                    parts.Add(part);
-                }, null); // Ignore errors in GetPart() and continue
-            }
+            PartCollection parts = new PartCollection(result);
             if (partsHandler != null) {
                 partsHandler(parts);
             }
@@ -56,6 +51,7 @@ public class MySqlPartsDb : PartsDb
 
     public override void GetPart(string Part_num, PartHandler handler, ErrorHandler errorHandler)
     {
+        //TODO: Move this logic into a stored procedure
         string sql = "SELECT * FROM Parts WHERE Part_num = '" + Part_num + "'";
         Execute(sql, delegate(DataTable attributeResult) {
             if (attributeResult.Rows.Count > 0) {

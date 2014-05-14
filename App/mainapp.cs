@@ -70,34 +70,8 @@ public class MainApp : Form
 
     private void ShowParts(PartType partType)
     {
-        dbm.GetParts(partType, delegate(List<Part> parts) {
-            DataTable result = new DataTable();
-            result.TableName = partType.name;
-            if (parts.Count > 0) {
-                foreach (DataColumn col in parts[0].Attributes.Columns) {
-                    result.Columns.Add(col.ColumnName, col.DataType);
-                }
-                foreach (DataColumn col in parts[0].ExtendedAttributes.Columns) {
-                    if (!result.Columns.Contains(col.ColumnName)) {
-                        result.Columns.Add(col.ColumnName, col.DataType);
-                    }
-                }
-                foreach (Part part in parts) {
-                    DataRow row = result.NewRow();
-                    foreach (DataColumn col in part.Attributes.Columns) {
-                        row[col.ColumnName] = part.Attributes.Rows[0][col.ColumnName];
-                    }
-                    if (parts[0].ExtendedAttributes.Rows.Count > 0) {
-                        foreach (DataColumn col in part.ExtendedAttributes.Columns) {
-                            if (row.IsNull(col.ColumnName)) {
-                                row[col.ColumnName] = part.ExtendedAttributes.Rows[0][col.ColumnName];
-                            }
-                        }
-                    }
-                    result.Rows.Add(row);
-                }
-            }
-            mv.PartsView.DataSource = result;
+        dbm.GetParts(partType, delegate(PartCollection parts) {
+            mv.PartsView.Parts = parts;
         }, null);
     }
 
