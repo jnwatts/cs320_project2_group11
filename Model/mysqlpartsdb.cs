@@ -160,6 +160,58 @@ public class MySqlPartsDb : PartsDb
         }
     }
 
+    public void RepairMissingAttributes()
+    {
+        this.GetPartTypes(delegate(List<PartType> partTypes) {
+            foreach (PartType partType in partTypes) {
+                MySqlCommand cmd = new MySqlCommand();
+                MySqlCommandBuilder bld = new MySqlCommandBuilder();
+                Connect();
+                cmd.Connection = _con;
+                string typeAttributesTable = string.Format("{0}_attributes", partType.name);
+                string partNumColumnEscaped = bld.QuoteIdentifier("Part_num");
+                string partsTableEscaped = bld.QuoteIdentifier("Parts");
+                string partTypesTableEscaped = bld.QuoteIdentifier("Part_types");
+                string partTypeIdColumnEscaped = bld.QuoteIdentifier("Part_type_id");
+                string typeAttributesTableEscaped = bld.QuoteIdentifier(typeAttributesTable);
+                cmd.CommandText = string.Format("SELECT {0} FROM {1} AS P NATURAL JOIN {2} WHERE P.{3} = @partType AND P.{0} NOT IN ( SELECT {0} FROM {4} )",
+                    partNumColumnEscaped,
+                    partsTableEscaped,
+                    partTypesTableEscaped,
+                    partTypeIdColumnEscaped,
+                    typeAttributesTableEscaped);
+                cmd.Parameters.AddWithValue("@partType", partType.typeId);
+#if DEBUG
+                Console.WriteLine(Util.SqlCommandToString(cmd));
+#endif
+                MySqlDataReader typeReader = cmd.ExecuteReader();
+                List<MySqlCommand> insertCommands = new List<MySqlCommand>();
+                try {
+                    while (typeReader.Read()) {
+                        string partNum = (string)typeReader["Part_num"];
+                        MySqlCommand insertCmd = new MySqlCommand();
+                        insertCmd.Connection = _con;
+                        insertCmd.CommandText = string.Format("INSERT INTO {0} ({1}) VALUES (@partNum)",
+                            typeAttributesTableEscaped,
+                            partNumColumnEscaped);
+                        insertCmd.Parameters.AddWithValue("@partNum", partNum);
+                        insertCommands.Add(insertCmd);
+                    }
+                } finally {
+                    typeReader.Close();
+                }
+                foreach (MySqlCommand insertCmd in insertCommands) {
+                    int rowsAffected = insertCmd.ExecuteNonQuery();
+                    if (rowsAffected < 1) {
+                        Console.WriteLine("Warning: Failed to add {0} to {1} table",
+                                (string)insertCmd.Parameters["@partNum"].Value,
+                                typeAttributesTable);
+                    }
+                }
+            }
+        }, null);
+    }
+
     private string Connect()
     {
         if (_con == null) {

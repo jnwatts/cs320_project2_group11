@@ -32,6 +32,7 @@ public class MainApp : Form
         mv.PartsView.OnEditPart += EditPart;
         mv.PartsView.OnNewPart += NewPart;
         mv.PartsView.OnDeletePart += DeletePart;
+        mv.PartsView.OnRepairMissingAttributes += RepairMissingAttributes;
         mv.PartEditView.OnSavePart += SavePart;
 
         pm.Load();
@@ -102,5 +103,10 @@ public class MainApp : Form
     {
         ((MySqlPartsDb)dbm).DeletePart((string)row["Part_num"], null);
         ShowParts(mv.PartsView.SelectedPartType);
+    }
+
+    private void RepairMissingAttributes()
+    {
+        ((MySqlPartsDb)dbm).RepairMissingAttributes();
     }
 }

@@ -14,6 +14,7 @@ public class PartsView : UserControl
     private Button btnNewPart = null;
     private Button btnEditPart = null;
     private Button btnDeletePart = null;
+    private Button btnRepairMissingAttributes = null;
 
     public delegate void OnShowPartsHandler(PartType partType);
     public event OnShowPartsHandler OnShowParts = null;
@@ -26,6 +27,9 @@ public class PartsView : UserControl
 
     public delegate void OnDeletePartHandler(DataRow row);
     public event OnDeletePartHandler OnDeletePart = null;
+
+    public delegate void OnRepairMissingAttributesHandler();
+    public event OnRepairMissingAttributesHandler OnRepairMissingAttributes = null;
 
     public List<PartType> PartTypes {
         set {
@@ -89,7 +93,6 @@ public class PartsView : UserControl
         cbPartType.SelectedIndexChanged += new EventHandler(delegate (object sender, EventArgs e) {
             this.RefreshParts();
         });
-        tlp0.RowCount++;
         tlp0.Controls.Add(cbPartType, 0, 0);
 
         btnRefresh = new Button();
@@ -112,6 +115,12 @@ public class PartsView : UserControl
         btnDeletePart.Click += new EventHandler(btnDeletePart_OnClick);
         tlp0.Controls.Add(btnDeletePart, 4, 0);
 
+        btnRepairMissingAttributes = new Button();
+        btnRepairMissingAttributes.Text = "Repair Attributes";
+        btnRepairMissingAttributes.Width *= 2;
+        btnRepairMissingAttributes.Click += new EventHandler(btnRepairMissingAttributes_OnClick);
+        tlp0.Controls.Add(btnRepairMissingAttributes, 5, 0);
+
         dgv = new DataGridView();
         dgv.Dock = DockStyle.Fill;
         dgv.MultiSelect = false;
@@ -127,9 +136,11 @@ public class PartsView : UserControl
                 OnEditPart(row);
             }
         });
-        tlp0.RowCount++;
         tlp0.Controls.Add(dgv, 0, 1);
-        tlp0.SetColumnSpan(dgv, 5);
+        tlp0.SetColumnSpan(dgv, 6);
+
+        tlp0.RowCount = 2;
+        tlp0.ColumnCount = 6;
 
         Util.FixTableLayoutStyles(tlp0);
         
@@ -191,6 +202,13 @@ public class PartsView : UserControl
             DataRowView view = (DataRowView)dgv.SelectedRows[0].DataBoundItem;
             DataRow row = view.Row;
             OnDeletePart(row);
+        }
+    }
+
+    private void btnRepairMissingAttributes_OnClick(object sender, EventArgs e)
+    {
+        if (OnRepairMissingAttributes != null) {
+            OnRepairMissingAttributes();
         }
     }
 
