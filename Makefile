@@ -31,7 +31,7 @@ debug: all
 
 MCS ?= gmcs
 MONO ?= mono
-MONOFLAGS ?= -debug -target:exe
+MONOFLAGS ?= -debug -target:winexe
 MONOFLAGS += $(foreach lib,$(LIBS),-pkg:$(lib))
 MONOFLAGS += $(foreach ref,$(REFS),-r:$(ref))
 MONOFLAGS += $(foreach def,$(DEFINES),-d:$(def))
