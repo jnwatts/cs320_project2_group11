@@ -24,14 +24,17 @@ REFS = Libs/MySql.Data.dll System.Data.dll
 
 LIBS = dotnet
 
+APP_TYPE = winexe
+
 all: $(TARGET)
 
 debug: DEFINES += DEBUG TRACE
+debug: APP_TYPE = exe
 debug: all
 
 MCS ?= gmcs
 MONO ?= mono
-MONOFLAGS ?= -debug -target:winexe
+MONOFLAGS ?= -debug -target:$(APP_TYPE)
 MONOFLAGS += $(foreach lib,$(LIBS),-pkg:$(lib))
 MONOFLAGS += $(foreach ref,$(REFS),-r:$(ref))
 MONOFLAGS += $(foreach def,$(DEFINES),-d:$(def))
