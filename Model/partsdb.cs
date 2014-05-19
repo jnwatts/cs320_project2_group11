@@ -7,6 +7,7 @@ public delegate void ErrorHandler(string message, Exception exception);
 public delegate void PartTypesHandler(List<PartType> partTypes);
 public delegate void PartsHandler(PartCollection part);
 public delegate void PartHandler(Part part);
+public delegate void ResultHandler(DataTable result);
 
 public abstract class PartsDb {
     public string Username { get; set; }
@@ -21,4 +22,6 @@ public abstract class PartsDb {
     //TODO: This should be based off a new part. The *controller* should figure out how to make the new part, the DB should only dutifully insert it.
     public abstract void NewPart(PartType partType, ErrorHandler errorHandler);
     public abstract void UpdatePart(Part part, ErrorHandler errorHandler);
+
+    public abstract void Execute(string sql, ResultHandler resultHandler, ErrorHandler errorHandler);
 }
