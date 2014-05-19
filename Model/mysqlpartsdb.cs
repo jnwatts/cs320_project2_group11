@@ -5,8 +5,6 @@ using System.Collections.Generic;
 
 public class MySqlPartsDb : PartsDb
 {
-    public delegate void ResultHandler(DataTable result);
-
     private MySqlConnection _con = null;
 
     private Dictionary<string, DataTable> tableSchemas;
@@ -121,7 +119,7 @@ public class MySqlPartsDb : PartsDb
         Execute(sql, null, errorHandler);
     }
 
-    public void Execute(string sql, ResultHandler resultHandler, ErrorHandler errorHandler)
+    public override void Execute(string sql, ResultHandler resultHandler, ErrorHandler errorHandler)
     {
 #if DEBUG
         Console.WriteLine("Execute: {0}", sql);
