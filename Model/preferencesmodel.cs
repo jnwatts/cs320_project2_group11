@@ -59,5 +59,6 @@ public class PreferencesModel
     {
         //TODO: The output from this looks like crap... but it works as required.
         prefs.WriteXml(Filename, XmlWriteMode.WriteSchema);
+        Load();
     }
 }
