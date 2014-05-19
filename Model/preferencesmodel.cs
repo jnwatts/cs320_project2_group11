@@ -3,7 +3,7 @@ using System.Data;
 
 public class PreferencesModel
 {
-    public event EventHandler Changed;
+    public event EventHandler Changed = null;
 
     public string Filename { get; set; }
     public DataTable CurrentPrefs {
@@ -25,7 +25,7 @@ public class PreferencesModel
     {
         this.prefs = prefs;
         if (Changed != null) {
-            Changed(this, new EventArgs());
+            Changed(this, EventArgs.Empty);
         }
     }
 
