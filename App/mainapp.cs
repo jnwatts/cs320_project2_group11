@@ -23,7 +23,8 @@ public class MainApp : Form
     public MainApp()
     {
         pm = new PreferencesModel(prefsPath);
-        dbm = new MySqlPartsDb();
+        //dbm = new MySqlPartsDb();
+        dbm = new SqlPartsDb();
         mv = new MainView();
         pm.Changed += new EventHandler(PrefsChanged);
         mv.PrefsView.OnSavePrefs += pm.Save;
@@ -57,7 +58,7 @@ public class MainApp : Form
 
     private void SQLExecute(string sql)
     {
-        ((MySqlPartsDb)dbm).Execute(sql, SQLResult, SQLError);
+        dbm.Execute(sql, SQLResult, SQLError);
     }
 
     private void SQLResult(DataTable result)
@@ -104,12 +105,12 @@ public class MainApp : Form
 
     private void DeletePart(DataRow row)
     {
-        ((MySqlPartsDb)dbm).DeletePart((string)row["Part_num"], null);
-        ShowParts(mv.PartsView.SelectedPartType);
+        //((MySqlPartsDb)dbm).DeletePart((string)row["Part_num"], null);
+        //ShowParts(mv.PartsView.SelectedPartType);
     }
 
     private void RepairMissingAttributes()
     {
-        ((MySqlPartsDb)dbm).RepairMissingAttributes();
+        //((MySqlPartsDb)dbm).RepairMissingAttributes();
     }
 }
