@@ -113,12 +113,14 @@ public class PartsView : UserControl
         btnDeletePart = new Button();
         btnDeletePart.Text = "Delete Part";
         btnDeletePart.Click += new EventHandler(btnDeletePart_OnClick);
+        btnDeletePart.Enabled = false;
         tlp0.Controls.Add(btnDeletePart, 4, 0);
 
         btnRepairMissingAttributes = new Button();
         btnRepairMissingAttributes.Text = "Repair Attributes";
         btnRepairMissingAttributes.Width *= 2;
         btnRepairMissingAttributes.Click += new EventHandler(btnRepairMissingAttributes_OnClick);
+        btnRepairMissingAttributes.Enabled = false;
         tlp0.Controls.Add(btnRepairMissingAttributes, 5, 0);
 
         dgv = new DataGridView();
