@@ -101,7 +101,11 @@ public class Util
         } else {
             str = cmd.CommandText;
             foreach (IDataParameter p in cmd.Parameters) {
-                str = str.Replace(p.ParameterName, p.Value.ToString());
+                if (p.DbType == DbType.String) {
+                    str = str.Replace(p.ParameterName, string.Format("'{0}'", p.Value));
+                } else {
+                    str = str.Replace(p.ParameterName, p.Value.ToString());
+                }
             }
         }
         return str;
