@@ -50,6 +50,9 @@ public class MainApp : Form
         dbm.Password = Util.GetColumnString(dt, "Password", "");
         dbm.Hostname = Util.GetColumnString(dt, "Hostname", "");
         dbm.Database = Util.GetColumnString(dt, "Database", "");
+        dbm.GetPartTypes(delegate(List<PartType> partTypes) {
+            mv.PartsView.PartTypes = partTypes;
+        }, null);
     }
 
     private void SQLExecute(string sql)
