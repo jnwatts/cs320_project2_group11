@@ -6,6 +6,7 @@ SOURCES = \
 	App/mainapp.cs \
     Model/partsdb.cs \
     Model/mysqlpartsdb.cs \
+    Model/sqlpartsdb.cs \
     Model/preferencesmodel.cs \
     Model/parttype.cs \
     Model/part.cs \
