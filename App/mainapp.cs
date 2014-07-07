@@ -81,9 +81,9 @@ public class MainApp : Form
         }, null);
     }
 
-    private void EditPart(DataRow row)
+    private void EditPart(DataRow row, PartType partType)
     {
-        dbm.GetPart((string)row["Part_num"], delegate(Part part) {
+        dbm.GetPart((string)row["Part_num"], partType, delegate(Part part) {
             if (part != null) {
                 mv.PartEditView.Part = part;
                 mv.ActiveTab = MainView.Tabs.Edit;

@@ -77,14 +77,8 @@ public class SqlPartsDb : PartsDb
         }, errorHandler);
     }
 
-    public override void GetPart(string Part_num, PartHandler handler, ErrorHandler errorHandler)
+    public override void GetPart(string Part_num, PartType partType, PartHandler handler, ErrorHandler errorHandler)
     {
-        //TODO: Move this logic into a stored procedure
-        PartType partType = PartNumToPartType(Part_num);
-        if (partType == null) {
-            handler(null);
-            return;
-        }
         SqlCommandBuilder bld = new SqlCommandBuilder();
         SqlCommand cmd = new SqlCommand();
         string tableNameEscaped = bld.QuoteIdentifier(partType.name);

@@ -22,7 +22,7 @@ public class PartsView : UserControl
     public delegate void OnNewPartHandler(PartType partType);
     public event OnNewPartHandler OnNewPart = null;
 
-    public delegate void OnEditPartHandler(DataRow row);
+    public delegate void OnEditPartHandler(DataRow row, PartType partType);
     public event OnEditPartHandler OnEditPart = null;
 
     public delegate void OnDeletePartHandler(DataRow row);
@@ -136,7 +136,7 @@ public class PartsView : UserControl
             if (OnEditPart != null) {
                 DataRowView view = (DataRowView)dgv.Rows[e.RowIndex].DataBoundItem;
                 DataRow row = view.Row;
-                OnEditPart(row);
+                OnEditPart(row, this.SelectedPartType);
             }
         });
         tlp0.Controls.Add(dgv, 0, 1);
@@ -196,7 +196,7 @@ public class PartsView : UserControl
         if (OnEditPart != null && dgv.SelectedRows.Count > 0) {
             DataRowView view = (DataRowView)dgv.SelectedRows[0].DataBoundItem;
             DataRow row = view.Row;
-            OnEditPart(row);
+            OnEditPart(row, this.SelectedPartType);
         }
     }
 

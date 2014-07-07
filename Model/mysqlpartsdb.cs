@@ -46,7 +46,7 @@ public class MySqlPartsDb : PartsDb
         }, errorHandler);
     }
 
-    public override void GetPart(string Part_num, PartHandler handler, ErrorHandler errorHandler)
+    public override void GetPart(string Part_num, PartType partType, PartHandler handler, ErrorHandler errorHandler)
     {
         //TODO: Move this logic into a stored procedure
         string sql = "SELECT Part_type_id, Type FROM Parts NATURAL LEFT JOIN Part_types WHERE Part_num = '" + Part_num + "'";

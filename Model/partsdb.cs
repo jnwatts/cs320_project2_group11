@@ -17,7 +17,7 @@ public abstract class PartsDb {
 
     public abstract void GetPartTypes(PartTypesHandler partTypeHandler, ErrorHandler errorHandler);
 
-    public abstract void GetPart(string Part_num, PartHandler partHandler, ErrorHandler errorHandler);
+    public abstract void GetPart(string Part_num, PartType partType, PartHandler partHandler, ErrorHandler errorHandler);
     public abstract void GetParts(PartType partType, PartsHandler partsHandler, ErrorHandler errorHandler);
     //TODO: This should be based off a new part. The *controller* should figure out how to make the new part, the DB should only dutifully insert it.
     public abstract void NewPart(PartType partType, ErrorHandler errorHandler);
