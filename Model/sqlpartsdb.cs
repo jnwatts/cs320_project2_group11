@@ -96,7 +96,6 @@ public class SqlPartsDb : PartsDb
             Part part = null;
             if (partResult.Rows.Count > 0) {
                 partResult.Columns["Part Number"].ColumnName = "Part_num";
-                partResult.Columns.Remove("Part Type");
                 part = new Part(Part_num, partType.typeId, partType.name, partResult);
             }
             if (handler != null) {
