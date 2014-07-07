@@ -63,9 +63,9 @@ public class SqlPartsDb : PartsDb
         string tableNameEscaped = bld.QuoteIdentifier(partType.name);
         cmd.CommandType = System.Data.CommandType.Text;
 #if DEBUG
-        cmd.CommandText = string.Format("SELECT TOP 4 * FROM {0}", tableNameEscaped);
+        cmd.CommandText = string.Format("SELECT TOP 4 * FROM {0} ORDER BY [Part Number] ASC", tableNameEscaped);
 #else
-        cmd.CommandText = string.Format("SELECT * FROM {0}", tableNameEscaped);
+        cmd.CommandText = string.Format("SELECT * FROM {0} ORDER BY [Part Number] ASC", tableNameEscaped);
 #endif
         Execute(cmd, delegate(DataTable result) {
             result.Columns["Part Number"].ColumnName = "Part_num";
