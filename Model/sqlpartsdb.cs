@@ -31,7 +31,8 @@ public class SqlPartsDb : PartsDb
         "DSP_uP",
         "Imaging",
         "Transformer",
-        "Programmable_Logic"
+        "Programmable_Logic",
+		"PCBs"
     };
 
     public SqlPartsDb()
