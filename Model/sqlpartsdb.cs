@@ -12,27 +12,27 @@ public class SqlPartsDb : PartsDb
 
     private readonly string[] stringTypes = new string[] {"CHAR", "VARCHAR", "BINARY", "VARBINARY", "BLOB", "TEXT", "ENUM", "SET"};
     private readonly string[] partTypeNames = new string[] {
-        "Capacitor",
-        "Resistor",
-        "Connector",
-        "Optocoupler_Isolator",
-        "Logic",
-        "Inductor",
-        "Memory",
-        "Diode",
-        "Transistor",
-        "Switch",
-        "Misc",
         "Analog",
-        "Interface",
-        "Power",
-        "Data_Converters",
+        "Capacitor",
+        "Connector",
         "Crystals_Oscillators",
+        "Data_Converters",
+        "Diode",
         "DSP_uP",
         "Imaging",
-        "Transformer",
+        "Inductor",
+        "Interface",
+        "Logic",
+        "Memory",
+        "Misc",
+        "Optocoupler_Isolator",
+        "PCBs",
+        "Power",
         "Programmable_Logic",
-		"PCBs"
+        "Resistor",
+        "Switch",
+        "Transformer",
+        "Transistor"
     };
 
     public SqlPartsDb()
