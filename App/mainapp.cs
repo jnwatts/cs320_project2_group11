@@ -12,6 +12,7 @@ public class MainApp : Form
 
     private string prefsPath = "preferences.xml";
 
+    [STAThread]
     public static void Main()
     {
         //TODO: Read settings path from arg or env?
