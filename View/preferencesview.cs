@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
@@ -17,6 +18,7 @@ public class PreferencesView : UserControl
     private TextBox tDatabase;
     private CheckBox cbPooling;
     private Button btnSave;
+    private Label lVersion;
 
     public delegate void OnSavePrefsHandler(DataTable prefs);
     public event OnSavePrefsHandler OnSavePrefs = null;
@@ -50,6 +52,8 @@ public class PreferencesView : UserControl
         tlp0.Controls.Add(cbPooling = new CheckBox());
         tlp0.RowCount++;
         tlp0.Controls.Add(btnSave = new Button());
+        tlp0.RowCount++;
+        tlp0.Controls.Add(lVersion = new Label(), 0, tlp0.RowCount - 1);
 
         tUsername.Dock = DockStyle.Fill;
         tPassword.Dock = DockStyle.Fill;
@@ -63,6 +67,8 @@ public class PreferencesView : UserControl
         lPooling.Text = "Connection Pooling";
         btnSave.Text = "Save";
         btnSave.Click += new EventHandler(btnSave_OnClick);
+
+        lVersion.Text = "v" + Assembly.GetExecutingAssembly().GetName().Version;
 
         // Work around weird bug w/ last column's SizeType.AutoSize growing but not shrinking
         Util.FixTableLayoutStyles(tlp0);
