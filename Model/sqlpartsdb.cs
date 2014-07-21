@@ -128,7 +128,7 @@ public class SqlPartsDb : PartsDb
     public override void UpdatePart(Part part, ErrorHandler errorHandler)
     {
         SqlCommand cmd = null;
-        PartType partType = PartNumToPartType(part.Part_num);
+        PartType partType = PartNumToPartType(part);
         if (partType == null) {
             return;
         }
@@ -294,15 +294,11 @@ public class SqlPartsDb : PartsDb
         return tableSchemas[tableName];
     }
 
-    private PartType PartNumToPartType(string partNum)
+    private PartType PartNumToPartType(Part part)
     {
         PartType retVal = null;
-        Match match = Regex.Match(partNum, @"D3-([A-Za-z0-9]{3})([A-Za-z0-9]{4})");
-        Console.WriteLine("Matching {0}: {1}", partNum, match.Success);
-        if (match.Success) {
-            int typeId = Convert.ToInt32(match.Groups[1].ToString());
-            return new PartType(typeId, partTypeNames[typeId]);
-        }
+        Console.WriteLine("{0}: {1}={2}", part.Part_num, part.Part_type_id, part.Part_type);
+        retVal = new PartType(part.Part_type_id, partTypeNames[part.Part_type_id]);
         return retVal;
     }
 
