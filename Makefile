@@ -1,6 +1,6 @@
 .PHONY: all run clean
 
-TARGET = cs320_project2_group11.exe
+TARGET = partsdbgui.exe
 
 SOURCES = \
 	App/mainapp.cs \
