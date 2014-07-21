@@ -63,6 +63,8 @@ public class MainView : Form
         this.Height = 600;
         this.Width = 600;
 
+        this.Text = "PartsDB";
+
         tabControl = new TabControl();
         tabControl.Dock = DockStyle.Fill;
         tabControl.Selected += new TabControlEventHandler(delegate (object sender, TabControlEventArgs e) {
