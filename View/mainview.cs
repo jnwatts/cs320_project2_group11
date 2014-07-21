@@ -78,18 +78,6 @@ public class MainView : Form
         });
         Controls.Add(tabControl);
 
-        rsvTab = new TabPage("Raw SQL");
-        rsv = new RawSqlView();
-        rsv.Dock = DockStyle.Fill;
-        rsvTab.Controls.Add(rsv);
-        tabControl.TabPages.Add(rsvTab);
-
-        pvTab = new TabPage("Preferences");
-        pv = new PreferencesView();
-        pv.Dock = DockStyle.Fill;
-        pvTab.Controls.Add(pv);
-        tabControl.TabPages.Add(pvTab);
-
         partsTab = new TabPage("Parts");
         parts = new PartsView();
         parts.Dock = DockStyle.Fill;
@@ -101,6 +89,18 @@ public class MainView : Form
         partEdit.Dock = DockStyle.Fill;
         partEditTab.Controls.Add(partEdit);
         tabControl.TabPages.Add(partEditTab);
+
+        pvTab = new TabPage("Preferences");
+        pv = new PreferencesView();
+        pv.Dock = DockStyle.Fill;
+        pvTab.Controls.Add(pv);
+        tabControl.TabPages.Add(pvTab);
+
+        rsvTab = new TabPage("Raw SQL");
+        rsv = new RawSqlView();
+        rsv.Dock = DockStyle.Fill;
+        rsvTab.Controls.Add(rsv);
+        tabControl.TabPages.Add(rsvTab);
 
 
         this.ResumeLayout();
