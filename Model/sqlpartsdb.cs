@@ -154,6 +154,11 @@ public class SqlPartsDb : PartsDb
 
     public override void Execute(string sql, ResultHandler resultHandler, ErrorHandler errorHandler)
     {
+        if (sql == "fix_newlines") {
+            FixNewlines(resultHandler, errorHandler);
+            return;
+        }
+
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = System.Data.CommandType.Text;
         cmd.CommandText = sql;
@@ -368,5 +373,51 @@ public class SqlPartsDb : PartsDb
         } else {
             return null;
         }
+    }
+    private void FixNewlines(ResultHandler resultHandler, ErrorHandler errorHandler) {
+        string dbName = "orcad_development_fix_footprints";
+        string sql = string.Format("SELECT TABLE_NAME FROM [{0}].information_schema.tables", dbName);
+        string finalSql = "";
+        Execute(sql, delegate(DataTable tableResult) {
+            foreach (DataRow tableRow in tableResult.Rows) {
+                string tableName = tableRow["TABLE_NAME"].ToString();
+                sql = string.Format(
+                    "SELECT COLUMN_NAME FROM [{0}].INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{1}' AND COLUMN_NAME = '{2}'",
+                    dbName,
+                    tableName,
+                    "PCB Footprint"
+                    );
+                Execute(sql, delegate(DataTable columnResult) {
+                    if (columnResult.Rows.Count > 0) {
+                        sql = string.Format(
+                            "SELECT [Part Number], [PCB Footprint] FROM [{0}].[dbo].[{1}] WHERE [PCB Footprint] LIKE '%['+CHAR(10)+CHAR(13)+']%'",
+                            dbName,
+                            tableName
+                            );
+                        Execute(sql, delegate(DataTable fpResult) {
+                            foreach (DataRow fpRow in fpResult.Rows) {
+                                string partNum = fpRow["Part Number"].ToString();
+                                string footprint = fpRow["PCB Footprint"].ToString().Replace("\nD3-SM_R_1206", "").Replace("\r", "").Replace("\n", "");
+                                string previousValue = fpRow["PCB Footprint"].ToString().Replace("\r", "\\r").Replace("\n", "\\n");
+                                sql = string.Format("UPDATE [{0}].[dbo].[{1}] SET [PCB Footprint] = '{2}' WHERE [Part Number] = '{3}'; -- Previous value: {4}",
+                                    dbName,
+                                    tableName,
+                                    footprint,
+                                    partNum,
+                                    previousValue
+                                    );
+                                //Execute(sql, null, errorHandler);
+                                finalSql += sql + "\r\n";
+                            }
+                        }, errorHandler);
+                    }
+                }, errorHandler);
+            }
+            //foreach (DataRow srcRow in result.Rows) {
+                //
+            //}
+        }, errorHandler);
+
+        errorHandler(finalSql, null);
     }
 }
