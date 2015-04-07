@@ -69,6 +69,7 @@ public class PartEditView : UserControl
         dgvAttributes.AllowUserToAddRows = false;
         dgvAttributes.AllowUserToDeleteRows = false;
         dgvAttributes.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(dgv_DataBindingComplete);
+        dgvAttributes.CellParsing += new DataGridViewCellParsingEventHandler(dgv_CellParsing);
         tlp0.Controls.Add(dgvAttributes, 0, 1);
         tlp0.SetColumnSpan(dgvAttributes, 3);
 
@@ -89,6 +90,16 @@ public class PartEditView : UserControl
         }
         if (dgv.Columns.Contains("Part_type_id")) {
             dgv.Columns.Remove("Part_type_id");
+        }
+    }
+
+    private void dgv_CellParsing(object sender, DataGridViewCellParsingEventArgs e)
+    {
+        if (e != null && e.Value != null) {
+            if (e.Value.ToString().Contains("\r") || e.Value.ToString().Contains("\n")) {
+                e.Value = e.Value.ToString().Replace("\r", "").Replace("\n", "");
+                e.ParsingApplied = true;
+            }
         }
     }
 
